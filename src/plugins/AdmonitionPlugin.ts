@@ -27,19 +27,6 @@ export default function AdmonitionPlugin(): BytemdPlugin {
             remarkDirectiveCustom
         ),
         // 扩展 Rehype 渲染器，处理指令节点
-        rehype: (processor)=>processor.use(()=>(tree)=>{
-            visit(tree,(node)=>{
-                if(node.type === 'element' && node.tagName === 'div'){
-                    const className = node.properties?.className as string[];
-                    if(className && className[0].startsWith('admonition-')){
-                        const type = className[0].replace('admonition-','');
-                        node.tagName = 'div';
-                    }
-                }
-            })
-        }),
-        viewerEffect({markdownBody}){
-            const admonition_info = markdownBody.querySelector('.admonition-info');
-            }
+        rehype: (processor)=>processor.use(()=>{}),
         }
     };
