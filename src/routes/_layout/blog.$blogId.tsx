@@ -24,6 +24,7 @@ import { RenderPlugin } from '@/plugins/RenderPlugin'
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
 import MarkdownTOC from '@/components/MarkdownTOC'
 import CommonPlugin from '@/plugins/CommonPlugin'
+import BlockQuote from '@/components/BlockQuote'
 
 export const Route = createFileRoute('/_layout/blog/$blogId')({
     component: BlogDetail,

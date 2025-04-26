@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import { useMount } from 'ahooks';
@@ -77,15 +77,50 @@ export const MarkdownTOC: React.FC<MarkdownTOCProps> = ({
   onItemClick,
 }) => {
   const [headings, setHeadings] = React.useState<TOCItem[]>([]);
+  const [activeId, setActiveId] = useState<string>('');
+  
   useMount(() => {
     setHeadings(parseHeadingsFromDOM(maxDepth));
-    // headings = useMemo(() => parseHeadingsFromDOM(maxDepth), [maxDepth]);
     if (headings.length === 0) {
       return null;
     }
   });
   // const headings = useMemo(() => parseMarkdownHeadings(markdown, maxDepth), [markdown, maxDepth]);
 
+  // 添加监听滚动事件以更新活跃的目录项
+  useEffect(() => {
+    const handleScroll = () => {
+      const headingElements = headings.map(heading => 
+        document.getElementById(heading.id)
+      ).filter(Boolean) as HTMLElement[];
+      
+      if (headingElements.length === 0) return;
+      
+      // 找到当前在视口中最上方的标题
+      const scrollPosition = window.scrollY + 100; // 添加一点偏移量
+      
+      // 找到当前滚动位置之前的最后一个标题
+      for (let i = headingElements.length - 1; i >= 0; i--) {
+        const element = headingElements[i];
+        if (element.offsetTop <= scrollPosition) {
+          setActiveId(element.id);
+          return;
+        }
+      }
+      
+      // 如果没有找到，设置第一个为活跃
+      if (headingElements.length > 0) {
+        setActiveId(headingElements[0].id);
+      }
+    };
+    
+    // 初始化
+    handleScroll();
+    
+    // 添加滚动事件监听
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [headings]);
 
   const handleItemClick = (id: string) => {
     if (onItemClick) {
@@ -108,11 +143,18 @@ export const MarkdownTOC: React.FC<MarkdownTOCProps> = ({
       <Table>
         <TableBody>
           {headings.map((heading) => (
-            <TableRow key={heading.id} className="cursor-pointer hover:bg-muted/50">
+            <TableRow 
+              key={heading.id} 
+              className={cn(
+                "cursor-pointer",
+                activeId === heading.id ? "bg-primary/10" : "hover:bg-muted/50"
+              )}
+            >
               <TableCell
                 className={cn(
                   'py-1 border-0',
-                  heading.level === 1 ? 'pl-0' : `pl-${(heading.level - 1) * 4}`
+                  heading.level === 1 ? 'pl-0' : `pl-${(heading.level - 1) * 4}`,
+                  activeId === heading.id ? "font-medium text-primary" : ""
                 )}
                 onClick={() => handleItemClick(heading.id)}
               >
