@@ -26,12 +26,32 @@ import MarkdownTOC from '@/components/MarkdownTOC'
 import CommonPlugin from '@/plugins/CommonPlugin'
 import BlockQuotePlugin from '@/plugins/BlockQuotePlugin'
 import { getTagIcon } from '@/components/TagIcons'
+import { motion } from 'framer-motion'
 
 export const Route = createFileRoute('/_layout/blog/$blogId')({
     component: BlogDetail,
 })
 
+// 定义动画变体
+const fadeIn = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { duration: 0.6 } }
+}
 
+const slideUp = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+}
+
+const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1
+        }
+    }
+}
 
 function BlogDetail() {
     const { blogId } = useParams({ from: '/_layout/blog/$blogId' });
@@ -62,7 +82,12 @@ function BlogDetail() {
     return <div className="flex justify-center pt-10">
         <div className="flex w-2/3">
             <div className="gap-5 flex flex-col justify-center px-6 w-full">
-                <div className="gap-5 flex flex-col justify-center">
+                <motion.div 
+                    className="gap-5 flex flex-col justify-center"
+                    initial="hidden"
+                    animate="visible"
+                    variants={fadeIn}
+                >
                     <Breadcrumb>
                         <BreadcrumbList>
                             <BreadcrumbItem>
@@ -83,27 +108,55 @@ function BlogDetail() {
                         </div>
                     ) : blog ? (
                         <div className='flex'>
-                            <div className='w-3/4'>
+                            <motion.div 
+                                className='w-3/4'
+                                variants={slideUp}
+                            >
                                 <div className=' border-r-2 border-gray-200 pt-16 pr-6'>
-                                    <h1 className="text-3xl font-bold mt-4">{blog.title}</h1>
-                                    <div className="flex items-center text-gray-500 text-sm my-2">
+                                    <motion.h1 
+                                        className="text-3xl font-bold mt-4"
+                                        variants={slideUp}
+                                    >
+                                        {blog.title}
+                                    </motion.h1>
+                                    <motion.div 
+                                        className="flex items-center text-gray-500 text-sm my-2"
+                                        variants={slideUp}
+                                    >
                                         <MdOutlineDateRange className="mr-1" />
                                         {toFromNow(Date.parse(blog.$createdAt))}
-                                    </div>
-                                    <div className="mt-6 prose prose-slate max-w-none">
+                                    </motion.div>
+                                    <motion.div 
+                                        className="mt-6 prose prose-slate max-w-none"
+                                        variants={slideUp}
+                                    >
                                         <Viewer value={blog.content} plugins={plugins} />
-                                    </div>
+                                    </motion.div>
 
                                 </div>
-                                <div className='flex flex-wrap gap-2 mt-36'>
-                                    {blog.tags.map((tag: any) => (
-                                        <ArticleTag key={tag.tag_name} icon={getTagIcon(tag.tag_name)} tagName={tag.tag_name} />
-                                    ))}</div>
-                            </div>
+                                <motion.div 
+                                    className='flex flex-wrap gap-2 mt-36'
+                                    variants={staggerContainer}
+                                >
+                                    {blog.tags.map((tag: any, index: number) => (
+                                        <motion.div key={tag.tag_name} variants={slideUp}>
+                                            <ArticleTag icon={getTagIcon(tag.tag_name)} tagName={tag.tag_name} />
+                                        </motion.div>
+                                    ))}
+                                </motion.div>
+                            </motion.div>
 
-                            <div className="flex flex-col pl-8 pt-8">
+                            <motion.div 
+                                className="flex flex-col pl-8 pt-8"
+                                initial={{ opacity: 0, x: 20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.6, delay: 0.3 }}
+                            >
                                 <div className="text-xl my-10">作者</div>
-                                <div className="flex items-center space-x-3 cursor-pointer">
+                                <motion.div 
+                                    className="flex items-center space-x-3 cursor-pointer"
+                                    whileHover={{ scale: 1.03 }}
+                                >
                                     <Avatar>
                                         <AvatarImage src='https://avatars.githubusercontent.com/u/18780761?v=4' />
                                     </Avatar>
@@ -113,32 +166,58 @@ function BlogDetail() {
                                             一花一世界，一叶一追寻
                                         </div>
                                     </div>
-                                </div>
+                                </motion.div>
                                 <div className="text-xl my-10">分享至</div>
-                                <ul className="grid grid-cols-4 gap-2">
-                                    <FaLink className="border w-9 h-9 p-2 rounded-full hover:bg-stone-200 cursor-pointer border-stone-300" />
-                                    <SiTencentqq className="border w-9 h-9 p-2 rounded-full hover:bg-stone-200 cursor-pointer border-stone-300" />
-                                    <SiWechat className="border w-9 h-9 p-2 rounded-full hover:bg-stone-200 cursor-pointer border-stone-300" />
-                                    <SiSinaweibo className="border w-9 h-9 p-2 rounded-full hover:bg-stone-200 cursor-pointer border-stone-300" />
-                                    <SiX className="border w-9 h-9 p-2 rounded-full hover:bg-stone-200 cursor-pointer border-stone-300" />
-                                    <SiFacebook className="border w-9 h-9 p-2 rounded-full hover:bg-stone-200 cursor-pointer border-stone-300" />
-                                    <SiGmail className="border w-9 h-9 p-2 rounded-full hover:bg-stone-200 cursor-pointer border-stone-300" />
-                                    <SiZhihu className="border w-9 h-9 p-2 rounded-full hover:bg-stone-200 cursor-pointer border-stone-300" />
-                                </ul>
-                                <MarkdownTOC
-                                    markdown={blog.content}
-                                    className="sticky top-32 mt-16"
-                                    maxDepth={3}
-                                />
-                            </div>
+                                <motion.ul 
+                                    className="grid grid-cols-4 gap-2"
+                                    variants={staggerContainer}
+                                    initial="hidden"
+                                    animate="visible"
+                                >
+                                    {[
+                                        <FaLink className="border w-9 h-9 p-2 rounded-full hover:bg-stone-200 cursor-pointer border-stone-300" />,
+                                        <SiTencentqq className="border w-9 h-9 p-2 rounded-full hover:bg-stone-200 cursor-pointer border-stone-300" />,
+                                        <SiWechat className="border w-9 h-9 p-2 rounded-full hover:bg-stone-200 cursor-pointer border-stone-300" />,
+                                        <SiSinaweibo className="border w-9 h-9 p-2 rounded-full hover:bg-stone-200 cursor-pointer border-stone-300" />,
+                                        <SiX className="border w-9 h-9 p-2 rounded-full hover:bg-stone-200 cursor-pointer border-stone-300" />,
+                                        <SiFacebook className="border w-9 h-9 p-2 rounded-full hover:bg-stone-200 cursor-pointer border-stone-300" />,
+                                        <SiGmail className="border w-9 h-9 p-2 rounded-full hover:bg-stone-200 cursor-pointer border-stone-300" />,
+                                        <SiZhihu className="border w-9 h-9 p-2 rounded-full hover:bg-stone-200 cursor-pointer border-stone-300" />
+                                    ].map((icon, index) => (
+                                        <motion.li 
+                                            key={index}
+                                            variants={slideUp}
+                                            whileHover={{ scale: 1.1 }}
+                                        >
+                                            {icon}
+                                        </motion.li>
+                                    ))}
+                                </motion.ul>
+                                <motion.div
+                                    className='sticky top-32 mt-16'
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.5, delay: 0.6 }}
+                                >
+                                    <MarkdownTOC
+                                        markdown={blog.content}
+                                        maxDepth={3}
+                                    />
+                                </motion.div>
+                            </motion.div>
                         </div>
 
                     ) : (
-                        <div className="py-10 text-center">
+                        <motion.div 
+                            className="py-10 text-center"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.5 }}
+                        >
                             <p className="text-gray-500">博客文章不存在或已被删除</p>
-                        </div>
+                        </motion.div>
                     )}
-                </div>
+                </motion.div>
             </div>
         </div>
     </div>
