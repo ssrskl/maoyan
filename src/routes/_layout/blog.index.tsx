@@ -66,9 +66,6 @@ function Blog() {
         },
     });
     const navigate = useNavigate({from: '/blog'});
-    
-    console.log("博客列表已加载", blogs);
-    
     return <motion.div 
         className="flex justify-center pt-10"
         initial={{ opacity: 0 }}

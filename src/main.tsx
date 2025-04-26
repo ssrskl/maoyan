@@ -5,7 +5,8 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
 
-import './styles.css'
+import '@/styles/styles.css'
+import '@/styles/github-markdown.css'
 import reportWebVitals from './reportWebVitals.ts'
 import {  QueryClient, QueryClientProvider } from '@tanstack/react-query'
 

@@ -6,6 +6,8 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbS
 import { Skeleton } from '@/components/ui/skeleton'
 import { MdOutlineDateRange } from 'react-icons/md'
 import { toFromNow } from '@/lib/time'
+import { Editor, Viewer } from '@bytemd/react'
+import gfm from '@bytemd/plugin-gfm'
 
 export const Route = createFileRoute('/_layout/blog/$blogId')({
     component: BlogDetail,
@@ -13,7 +15,9 @@ export const Route = createFileRoute('/_layout/blog/$blogId')({
 
 function BlogDetail() {
     const { blogId } = useParams({ from: '/_layout/blog/$blogId' });
-    
+    const plugins = [
+        gfm(),
+    ]
     const { data: blog, isLoading } = useQuery({
         queryKey: ['blog', blogId],
         queryFn: async () => {
@@ -40,7 +44,7 @@ function BlogDetail() {
                             </BreadcrumbItem>
                             <BreadcrumbSeparator />
                             <BreadcrumbItem>
-                                <BreadcrumbLink>{isLoading ? '加载中...' : blog?.title}</BreadcrumbLink>
+                                <BreadcrumbLink className='font-bold text-black'>{isLoading ? '加载中...' : blog?.title}</BreadcrumbLink>
                             </BreadcrumbItem>
                         </BreadcrumbList>
                     </Breadcrumb>
@@ -58,9 +62,9 @@ function BlogDetail() {
                                 <MdOutlineDateRange className="mr-1" />
                                 {toFromNow(Date.parse(blog.$createdAt))}
                             </div>
-                            <ArticleTag icon={blog?.icon} tagName={blog?.tag} />
                             <div className="mt-6 prose prose-slate max-w-none">
-                                <div dangerouslySetInnerHTML={{ __html: blog.content || '<p>暂无内容</p>' }} />
+                                <Viewer value={blog.content} plugins={plugins}/>
+                                {/* <div dangerouslySetInnerHTML={{ __html: blog.content || '<p>暂无内容</p>' }} /> */}
                             </div>
                         </>
                     ) : (

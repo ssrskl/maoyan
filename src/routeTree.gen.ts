@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as RegisterImport } from './routes/register'
+import { Route as MarkdownDemoImport } from './routes/markdown-demo'
 import { Route as LoginImport } from './routes/login'
 import { Route as LayoutImport } from './routes/_layout'
 import { Route as LayoutIndexImport } from './routes/_layout/index'
@@ -24,6 +25,12 @@ import { Route as LayoutBlogBlogIdImport } from './routes/_layout/blog.$blogId'
 const RegisterRoute = RegisterImport.update({
   id: '/register',
   path: '/register',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MarkdownDemoRoute = MarkdownDemoImport.update({
+  id: '/markdown-demo',
+  path: '/markdown-demo',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -78,6 +85,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/markdown-demo': {
+      id: '/markdown-demo'
+      path: '/markdown-demo'
+      fullPath: '/markdown-demo'
+      preLoaderRoute: typeof MarkdownDemoImport
       parentRoute: typeof rootRoute
     }
     '/register': {
@@ -140,6 +154,7 @@ const LayoutRouteWithChildren =
 export interface FileRoutesByFullPath {
   '': typeof LayoutRouteWithChildren
   '/login': typeof LoginRoute
+  '/markdown-demo': typeof MarkdownDemoRoute
   '/register': typeof RegisterRoute
   '/about': typeof LayoutAboutRoute
   '/': typeof LayoutIndexRoute
@@ -149,6 +164,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
+  '/markdown-demo': typeof MarkdownDemoRoute
   '/register': typeof RegisterRoute
   '/about': typeof LayoutAboutRoute
   '/': typeof LayoutIndexRoute
@@ -160,6 +176,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_layout': typeof LayoutRouteWithChildren
   '/login': typeof LoginRoute
+  '/markdown-demo': typeof MarkdownDemoRoute
   '/register': typeof RegisterRoute
   '/_layout/about': typeof LayoutAboutRoute
   '/_layout/': typeof LayoutIndexRoute
@@ -172,17 +189,26 @@ export interface FileRouteTypes {
   fullPaths:
     | ''
     | '/login'
+    | '/markdown-demo'
     | '/register'
     | '/about'
     | '/'
     | '/blog/$blogId'
     | '/blog'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/register' | '/about' | '/' | '/blog/$blogId' | '/blog'
+  to:
+    | '/login'
+    | '/markdown-demo'
+    | '/register'
+    | '/about'
+    | '/'
+    | '/blog/$blogId'
+    | '/blog'
   id:
     | '__root__'
     | '/_layout'
     | '/login'
+    | '/markdown-demo'
     | '/register'
     | '/_layout/about'
     | '/_layout/'
@@ -194,12 +220,14 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   LayoutRoute: typeof LayoutRouteWithChildren
   LoginRoute: typeof LoginRoute
+  MarkdownDemoRoute: typeof MarkdownDemoRoute
   RegisterRoute: typeof RegisterRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   LayoutRoute: LayoutRouteWithChildren,
   LoginRoute: LoginRoute,
+  MarkdownDemoRoute: MarkdownDemoRoute,
   RegisterRoute: RegisterRoute,
 }
 
@@ -215,6 +243,7 @@ export const routeTree = rootRoute
       "children": [
         "/_layout",
         "/login",
+        "/markdown-demo",
         "/register"
       ]
     },
@@ -229,6 +258,9 @@ export const routeTree = rootRoute
     },
     "/login": {
       "filePath": "login.tsx"
+    },
+    "/markdown-demo": {
+      "filePath": "markdown-demo.tsx"
     },
     "/register": {
       "filePath": "register.tsx"
