@@ -8,15 +8,25 @@ import { MdOutlineDateRange } from 'react-icons/md'
 import { toFromNow } from '@/lib/time'
 import { Editor, Viewer } from '@bytemd/react'
 import gfm from '@bytemd/plugin-gfm'
+import highlight from '@bytemd/plugin-highlight'
+import AdmonitionPlugin from '@/plugins/AdmonitionPlugin'
+import type { BytemdPlugin } from 'bytemd'
+import { RenderPlugin } from '@/plugins/RenderPlugin'
+
 
 export const Route = createFileRoute('/_layout/blog/$blogId')({
     component: BlogDetail,
 })
 
+
+
 function BlogDetail() {
     const { blogId } = useParams({ from: '/_layout/blog/$blogId' });
     const plugins = [
         gfm(),
+        highlight(),
+        AdmonitionPlugin(),
+        RenderPlugin(),
     ]
     const { data: blog, isLoading } = useQuery({
         queryKey: ['blog', blogId],
@@ -48,7 +58,7 @@ function BlogDetail() {
                             </BreadcrumbItem>
                         </BreadcrumbList>
                     </Breadcrumb>
-                    
+
                     {isLoading ? (
                         <div className="w-full space-y-4">
                             <Skeleton className="h-8 w-3/4" />
@@ -63,7 +73,7 @@ function BlogDetail() {
                                 {toFromNow(Date.parse(blog.$createdAt))}
                             </div>
                             <div className="mt-6 prose prose-slate max-w-none">
-                                <Viewer value={blog.content} plugins={plugins}/>
+                                <Viewer value={blog.content} plugins={plugins} />
                                 {/* <div dangerouslySetInnerHTML={{ __html: blog.content || '<p>暂无内容</p>' }} /> */}
                             </div>
                         </>
