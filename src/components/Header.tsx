@@ -34,7 +34,7 @@ export default function Header() {
 
         <div className="flex sm:flex-none justify-end items-center space-x-2">
           <FaGithub
-            className="text-base w-8 h-8 p-2 rounded-lg hover:bg-gray-200 "
+            className="text-base w-8 h-8 p-2 rounded-lg hover:bg-gray-200 cursor-pointer"
             onClick={() => window.open("https://github.com/ssrskl")}
           />
           <FaRegLightbulb className="text-base w-8 h-8 p-2 rounded-lg hover:bg-gray-200 cursor-pointer " />

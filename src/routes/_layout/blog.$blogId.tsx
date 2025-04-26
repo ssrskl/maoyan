@@ -11,19 +11,19 @@ import {
     SiWechat,
     SiX,
     SiZhihu,
-  } from "react-icons/si";
+} from "react-icons/si";
 import { FaLink, FaLongArrowAltLeft } from "react-icons/fa";
 import { Skeleton } from '@/components/ui/skeleton'
 import { MdOutlineDateRange } from 'react-icons/md'
 import { toFromNow } from '@/lib/time'
-import { Editor, Viewer } from '@bytemd/react'
+import {  Viewer } from '@bytemd/react'
 import gfm from '@bytemd/plugin-gfm'
 import highlight from '@bytemd/plugin-highlight'
 import AdmonitionPlugin from '@/plugins/AdmonitionPlugin'
-import type { BytemdPlugin } from 'bytemd'
 import { RenderPlugin } from '@/plugins/RenderPlugin'
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
-
+import MarkdownTOC from '@/components/MarkdownTOC'
+import CommonPlugin from '@/plugins/CommonPlugin'
 
 export const Route = createFileRoute('/_layout/blog/$blogId')({
     component: BlogDetail,
@@ -38,6 +38,7 @@ function BlogDetail() {
         highlight(),
         AdmonitionPlugin(),
         RenderPlugin(),
+        CommonPlugin(),
     ]
     const { data: blog, isLoading } = useQuery({
         queryKey: ['blog', blogId],
@@ -93,7 +94,7 @@ function BlogDetail() {
                                 <div className="text-xl my-10">作者</div>
                                 <div className="flex items-center space-x-3 cursor-pointer">
                                     <Avatar>
-                                        <AvatarImage src='https://avatars.githubusercontent.com/u/18780761?v=4'/>
+                                        <AvatarImage src='https://avatars.githubusercontent.com/u/18780761?v=4' />
                                     </Avatar>
                                     <div className="flex flex-col space-y-3 ">
                                         <div className="font-bold text-sm">猫颜</div>
@@ -113,7 +114,11 @@ function BlogDetail() {
                                     <SiGmail className="border w-9 h-9 p-2 rounded-full hover:bg-stone-200 cursor-pointer border-stone-300" />
                                     <SiZhihu className="border w-9 h-9 p-2 rounded-full hover:bg-stone-200 cursor-pointer border-stone-300" />
                                 </ul>
-                                {/* <MarkdownTOC /> */}
+                                <MarkdownTOC
+                                    markdown={blog.content}
+                                    className="sticky top-32 mt-16"
+                                    maxDepth={3}
+                                />
                             </div>
                         </div>
 

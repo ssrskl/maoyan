@@ -1,6 +1,7 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
+import { useMount } from 'ahooks';
 
 export interface TOCItem {
   id: string;
@@ -44,6 +45,30 @@ const parseMarkdownHeadings = (markdown: string, maxDepth: number = 3): TOCItem[
 
   return headings;
 };
+const parseHeadingsFromDOM = (maxDepth: number = 3): TOCItem[] => {
+  const container = document.querySelector('.markdown-body');
+  if (!container) {
+    return [];
+  }
+
+  // 获取所有标题元素（h1, h2, h3 等）
+  const headingTags = Array.from({ length: maxDepth }, (_, i) => `h${i + 1}`);
+  const headings = container.querySelectorAll(headingTags.join(','));
+
+  const tocItems: TOCItem[] = [];
+  headings.forEach((heading) => {
+    const level = parseInt(heading.tagName.charAt(1), 10); // 从 h1, h2 中提取 level
+    const id = heading.id;
+    const text = heading.textContent?.trim() || '';
+
+    // 确保 id 和 text 存在
+    if (id && text) {
+      tocItems.push({ id, level, text });
+    }
+  });
+
+  return tocItems;
+};
 
 export const MarkdownTOC: React.FC<MarkdownTOCProps> = ({
   markdown,
@@ -51,11 +76,16 @@ export const MarkdownTOC: React.FC<MarkdownTOCProps> = ({
   maxDepth = 3,
   onItemClick,
 }) => {
-  const headings = useMemo(() => parseMarkdownHeadings(markdown, maxDepth), [markdown, maxDepth]);
+  const [headings, setHeadings] = React.useState<TOCItem[]>([]);
+  useMount(() => {
+    setHeadings(parseHeadingsFromDOM(maxDepth));
+    // headings = useMemo(() => parseHeadingsFromDOM(maxDepth), [maxDepth]);
+    if (headings.length === 0) {
+      return null;
+    }
+  });
+  // const headings = useMemo(() => parseMarkdownHeadings(markdown, maxDepth), [markdown, maxDepth]);
 
-  if (headings.length === 0) {
-    return null;
-  }
 
   const handleItemClick = (id: string) => {
     if (onItemClick) {
@@ -64,7 +94,10 @@ export const MarkdownTOC: React.FC<MarkdownTOCProps> = ({
       // 默认行为：滚动到锚点
       const element = document.getElementById(id);
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+        element.getBoundingClientRect();
+        const scrollY = element.getBoundingClientRect().top + window.pageYOffset - 80;
+        window.scrollTo({ top: scrollY, behavior: 'smooth' });
+        // element.scrollIntoView({behavior: 'smooth' });
       }
     }
   };
