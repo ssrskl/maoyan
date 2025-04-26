@@ -114,7 +114,7 @@ function About() {
                                 </BreadcrumbItem>
                                 <BreadcrumbSeparator />
                                 <BreadcrumbItem>
-                                    <BreadcrumbLink href="/">关于我</BreadcrumbLink>
+                                    <BreadcrumbLink href="/" className='font-blod text-black'>关于我</BreadcrumbLink>
                                 </BreadcrumbItem>
                             </BreadcrumbList>
                         </Breadcrumb>

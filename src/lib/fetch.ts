@@ -1,6 +1,6 @@
 import { $fetch } from 'ofetch'
 export const myfetch = $fetch.create({
-    baseURL: 'https://api.example.com',
+    baseURL: 'https://cloud.appwrite.io/v1',
     headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json'

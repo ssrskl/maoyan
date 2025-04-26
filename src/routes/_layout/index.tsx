@@ -77,8 +77,6 @@ const waveLetter = {
 };
 
 function App() {
-  const [password, setPassword] = React.useState('');
-  
   // 将文本拆分为单个字符以便应用波浪动画
   const text = "喜欢React、TypeScript和Java\\owo/ ~";
   const chars = Array.from(text);

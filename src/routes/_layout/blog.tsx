@@ -1,44 +1,152 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+import { databases } from '@/lib/appwrite';
+import { myfetch } from '@/lib/fetch';
+import { toFromNow } from '@/lib/time';
+import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router'
+import { MdOutlineDateRange, MdOutlineRemoveRedEye } from "react-icons/md";
+import type { Models } from 'appwrite';
+import { Skeleton } from '@/components/ui/skeleton';
+import { motion } from 'framer-motion';
+
+// 标签类型定义
+interface BlogTag {
+    tag_name: string;
+    tag_icon: string;
+}
+
+// 博客类型定义 - 扩展Appwrite Document类型
+interface BlogItem extends Models.Document {
+    title: string;
+    description: string;
+    tags?: BlogTag[];
+}
+
+// 博客列表响应类型 - 使用Appwrite DocumentList
+type BlogsResponse = Models.DocumentList<BlogItem>;
+
+// 定义容器动画变体
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+        opacity: 1,
+        transition: { 
+            when: "beforeChildren",
+            staggerChildren: 0.1,
+            duration: 0.3
+        }
+    }
+};
+
+// 定义子元素动画变体
+const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { 
+        y: 0, 
+        opacity: 1,
+        transition: { 
+            type: "spring", 
+            stiffness: 100,
+            damping: 12
+        }
+    }
+};
 
 export const Route = createFileRoute('/_layout/blog')({
     component: Blog,
 })
 
 function Blog() {
-    return <div className="flex justify-center pt-10">
-        <div className="flex w-2/3">
+    // 获取博客列表
+    const { data: blogs, isLoading } = useQuery<BlogsResponse>({
+        queryKey: ['blogs'],
+        queryFn: async () => {
+            const response = await databases.listDocuments('674ea924002fc5b22567',
+                '674ea93300318c2482e7');
+            return response as BlogsResponse;
+        },
+    });
+    return <motion.div 
+        className="flex justify-center pt-10"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+    >
+        <motion.div 
+            className="flex w-2/3"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+        >
             <div className="gap-5 flex flex-col justify-center px-6 w-full">
-                <Breadcrumb>
-                    <BreadcrumbList>
-                        <BreadcrumbItem>
-                            <BreadcrumbLink href="/">首页</BreadcrumbLink>
-                        </BreadcrumbItem>
-                        <BreadcrumbSeparator />
-                        <BreadcrumbItem>
-                            <BreadcrumbLink href="/">博客</BreadcrumbLink>
-                        </BreadcrumbItem>
-                    </BreadcrumbList>
-                </Breadcrumb>
-                <h1 className="text-4xl font-bold my-4">博客</h1>
-                <p>这里是写的一些博客文章</p>
+                <motion.div
+                    className="gap-5 flex flex-col justify-center"
+                    variants={itemVariants}
+                >
+                    <Breadcrumb>
+                        <BreadcrumbList>
+                            <BreadcrumbItem>
+                                <BreadcrumbLink href="/">首页</BreadcrumbLink>
+                            </BreadcrumbItem>
+                            <BreadcrumbSeparator />
+                            <BreadcrumbItem>
+                                <BreadcrumbLink href="/" className='font-blod text-black'>博客</BreadcrumbLink>
+                            </BreadcrumbItem>
+                        </BreadcrumbList>
+                    </Breadcrumb>
+                    <motion.h1 
+                        className="text-4xl font-bold my-4"
+                        variants={itemVariants}
+                    >
+                        博客
+                    </motion.h1>
+                    <motion.p variants={itemVariants}>
+                        这里是写的一些博客文章
+                    </motion.p>
+                </motion.div>
 
                 {/* 博客文章列表 */}
 
-                <ul className="grid grid-cols-2 gap-x-4 gap-y-10 w-full">
-                    {blogs ? (
-                        blogs.documents.map((blog) => (
-                            <li
+                <motion.ul 
+                    className="grid grid-cols-2 gap-x-4 gap-y-10 w-full mt-6"
+                    variants={containerVariants}
+                >
+                    {isLoading ? (
+                        // 加载动画
+                        [...Array(4)].map((_, index) => (
+                            <motion.li 
+                                key={index} 
+                                className="rounded-lg"
+                                variants={itemVariants}
+                            >
+                                <div className="flex flex-col rounded-lg bg-white h-full p-4">
+                                    <div className="flex items-center h-6 space-x-2 mb-2">
+                                        <Skeleton className="h-4 w-16" />
+                                    </div>
+                                    <Skeleton className="h-8 w-3/4 mb-2" />
+                                    <Skeleton className="h-20 w-full mb-3" />
+                                    <div className="flex items-center space-x-2">
+                                        <Skeleton className="h-4 w-20" />
+                                        <Skeleton className="h-4 w-16" />
+                                    </div>
+                                </div>
+                            </motion.li>
+                        ))
+                    ) : blogs ? (
+                        blogs.documents.map((blog, index) => (
+                            <motion.li
                                 key={blog.$id}
-                                className="animate-fade-up animate-ease-in-out hover:shadow-lg rounded-lg"
-                                style={{
-                                    animationDelay: `${getDelay()}ms`,
+                                className="rounded-lg hover:shadow-lg"
+                                variants={itemVariants}
+                                whileHover={{ 
+                                    scale: 1.02,
+                                    transition: { duration: 0.2 }
                                 }}
                             >
                                 <div
-                                    className="flex flex-col rounded-lg bg-white h-full hover:bg-stone-200 p-4 cursor-pointer"
+                                    className="flex flex-col rounded-lg bg-white h-full hover:bg-stone-200 p-4 cursor-pointer transition-all duration-300"
                                     onClick={() => {
-                                        navigate("/blogdetail/" + blog.$id);
+                                        // 处理点击
                                     }}
                                 >
                                     <div className="flex items-center h-6 space-x-2">
@@ -48,7 +156,7 @@ function Blog() {
                                                     <p className="text-gray-400 text-sm hover:underline">
                                                         # {tag.tag_name}
                                                     </p>
-                                                    <Icon icon={tag.tag_icon} className="w-4 h-4" />
+                                                    {/* <Icon icon={tag.tag_icon} className="w-4 h-4" /> */}
                                                 </div>
                                             ))}
                                     </div>
@@ -66,18 +174,15 @@ function Blog() {
                                         </div>
                                     </div>
                                 </div>
-                            </li>
+                            </motion.li>
                         ))
                     ) : (
                         <div>暂无数据</div>
                     )}
-                </ul>
+                </motion.ul>
 
                 {/**分页器 */}
-                <div className="flex justify-center mt-16">
-                    <Pagination total={2} showSizeChanger={false} />
-                </div>
             </div>
-        </div>
-    </div>
+        </motion.div>
+    </motion.div>
 }
