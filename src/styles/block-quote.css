@@ -1,0 +1,42 @@
+/* 块引用样式 */
+.block-quote {
+  display: inline-block;
+  margin: 0.25rem 0;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.375rem;
+  background-color: rgba(0, 120, 212, 0.1);
+  border-left: 3px solid rgba(0, 120, 212, 0.8);
+  transition: all 0.2s ease-in-out;
+}
+
+.block-quote-link {
+  color: #0078d4;
+  font-weight: 500;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.block-quote-link::before {
+  content: "🔗";
+  margin-right: 0.375rem;
+  font-size: 0.875rem;
+}
+
+.block-quote:hover {
+  background-color: rgba(0, 120, 212, 0.15);
+}
+
+/* 暗黑模式样式 */
+.dark .block-quote {
+  background-color: rgba(0, 120, 212, 0.15);
+  border-left: 3px solid rgba(0, 120, 212, 0.6);
+}
+
+.dark .block-quote-link {
+  color: #4cc2ff;
+}
+
+.dark .block-quote:hover {
+  background-color: rgba(0, 120, 212, 0.25);
+} 

@@ -7,6 +7,7 @@ import { Viewer } from '@bytemd/react';
 import gfm from '@bytemd/plugin-gfm';
 import highlight from '@bytemd/plugin-highlight';
 import AdmonitionPlugin from '@/plugins/AdmonitionPlugin';
+import BlockQuotePlugin from '@/plugins/BlockQuotePlugin';
 import 'bytemd/dist/index.css';
 
 export const Route = createFileRoute('/markdown-demo')({
@@ -54,12 +55,40 @@ const admonitionExample = `# Admonition 指令示例
 :::
 `;
 
+// 块引用示例内容
+const blockQuoteExample = `# 块引用示例
+
+这是一个展示如何使用特殊语法创建块引用的示例。
+
+## 基本用法
+
+使用 \`[[(名称),(链接URL)]]\` 格式可以快速创建一个带样式的引用链接：
+
+[[(百度搜索),(https://www.baidu.com)]]
+
+[[(GitHub),(https://github.com)]]
+
+## 在段落中使用
+
+你可以在段落中插入块引用链接，这里是一个例子：我们可以使用 [[(React官网),(https://react.dev)]] 来查看React的官方文档，或者访问 [[(MDN Web Docs),(https://developer.mozilla.org)]] 来查看Web开发相关文档。
+
+## 适用场景
+
+块引用链接适合用于：
+
+1. 文献引用和参考资料
+2. 相关文章和推荐阅读
+3. 定义术语的词汇表链接
+4. 外部资源链接的突出显示
+`;
+
 function MarkdownDemo() {
   // 配置ByteMD插件
   const plugins = [
     gfm(),
     highlight(),
-    AdmonitionPlugin()
+    AdmonitionPlugin(),
+    BlockQuotePlugin()
   ];
   
   return (
@@ -71,6 +100,7 @@ function MarkdownDemo() {
           <TabsTrigger value="toc">目录示例</TabsTrigger>
           <TabsTrigger value="editor">编辑器示例</TabsTrigger>
           <TabsTrigger value="admonition">提示框示例</TabsTrigger>
+          <TabsTrigger value="blockquote">块引用示例</TabsTrigger>
         </TabsList>
         
         <TabsContent value="toc" className="p-4 border rounded-lg">
@@ -109,6 +139,24 @@ function MarkdownDemo() {
             <h3 className="text-lg font-semibold mb-2">Markdown 源代码</h3>
             <pre className="text-sm overflow-auto p-4 bg-background rounded-lg">
               {admonitionExample}
+            </pre>
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="blockquote" className="p-4 border rounded-lg">
+          <div className="mb-6">
+            <h2 className="text-xl font-semibold mb-2">块引用链接效果</h2>
+            <p className="text-muted-foreground mb-6">
+              下面展示了块引用链接的实际效果，使用特殊语法 [[(名称),(链接URL)]] 生成。
+            </p>
+            <div className="prose max-w-none dark:prose-invert">
+              <Viewer value={blockQuoteExample} plugins={plugins} />
+            </div>
+          </div>
+          <div className="mt-8 p-4 bg-muted rounded-lg">
+            <h3 className="text-lg font-semibold mb-2">Markdown 源代码</h3>
+            <pre className="text-sm overflow-auto p-4 bg-background rounded-lg">
+              {blockQuoteExample}
             </pre>
           </div>
         </TabsContent>

@@ -30,6 +30,16 @@ const initialMarkdown = `# Markdown 编辑器与目录示例
 
 你可以通过 className 属性自定义组件的样式。
 
+## 块引用功能
+
+我们支持特殊的块引用格式，使用方括号包括内容和URL：
+
+[[(百度),(https://www.baidu.com)]]
+
+[[(GitHub),(https://github.com)]]
+
+这些会被转换为带有特殊样式的链接。
+
 ## 实现细节
 
 ### ByteMD 插件

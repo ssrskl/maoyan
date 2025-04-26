@@ -4,6 +4,7 @@ import gfm from '@bytemd/plugin-gfm';
 import 'bytemd/dist/index.css';
 import MarkdownTOC from './MarkdownTOC';
 import { cn } from '@/lib/utils';
+import BlockQuotePlugin from '@/plugins/BlockQuotePlugin';
 
 interface MarkdownEditorProps {
   initialValue?: string;
@@ -50,7 +51,7 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
   maxTOCDepth = 3,
 }) => {
   const [value, setValue] = useState(initialValue);
-  const plugins = [gfm(), headingAnchorPlugin()];
+  const plugins = [gfm(), headingAnchorPlugin(), BlockQuotePlugin()];
 
   useEffect(() => {
     setValue(initialValue);

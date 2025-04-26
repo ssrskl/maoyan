@@ -11,21 +11,19 @@ interface BlockQuoteProps {
 export default function BlockQuote({
   anchorName,
   anchorLink,
-  className,
 }: BlockQuoteProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <a
-      href={anchorLink}
+    <span
       className={cn(
-        "rounded-sm bg-muted p-1 flex max-w-fit",
-        className
+        "rounded-sm bg-muted px-2 py-1 flex max-w-fit shadow-md"
       )}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={() => window.open(anchorLink, '_blank')}
     >
-      <div className="flex items-center">
+      <span className="flex items-center">
         <span className={cn("text-foreground text-xs font-medium",isHovered && "underline")}>{anchorName}</span>
         <ArrowRight
           className={cn(
@@ -33,7 +31,7 @@ export default function BlockQuote({
             isHovered && "translate-x-1"
           )}
         />
-      </div>
-    </a>
+      </span>
+    </span>
   );
 }

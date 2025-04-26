@@ -16,7 +16,7 @@ import { FaLink, FaLongArrowAltLeft } from "react-icons/fa";
 import { Skeleton } from '@/components/ui/skeleton'
 import { MdOutlineDateRange } from 'react-icons/md'
 import { toFromNow } from '@/lib/time'
-import {  Viewer } from '@bytemd/react'
+import { Viewer } from '@bytemd/react'
 import gfm from '@bytemd/plugin-gfm'
 import highlight from '@bytemd/plugin-highlight'
 import AdmonitionPlugin from '@/plugins/AdmonitionPlugin'
@@ -24,7 +24,8 @@ import { RenderPlugin } from '@/plugins/RenderPlugin'
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
 import MarkdownTOC from '@/components/MarkdownTOC'
 import CommonPlugin from '@/plugins/CommonPlugin'
-import BlockQuote from '@/components/BlockQuote'
+import BlockQuotePlugin from '@/plugins/BlockQuotePlugin'
+import { getTagIcon } from '@/components/TagIcons'
 
 export const Route = createFileRoute('/_layout/blog/$blogId')({
     component: BlogDetail,
@@ -37,9 +38,10 @@ function BlogDetail() {
     const plugins = [
         gfm(),
         highlight(),
-        AdmonitionPlugin(),
-        RenderPlugin(),
         CommonPlugin(),
+        AdmonitionPlugin(),
+        BlockQuotePlugin(),
+        RenderPlugin(),
     ]
     const { data: blog, isLoading } = useQuery({
         queryKey: ['blog', blogId],
@@ -49,6 +51,7 @@ function BlogDetail() {
                 '674ea93300318c2482e7',
                 blogId
             )
+            console.log(response);
             return response
         },
         enabled: !!blogId
@@ -80,17 +83,24 @@ function BlogDetail() {
                         </div>
                     ) : blog ? (
                         <div className='flex'>
-                            <div className='w-3/4 border-r-2 border-gray-200 pt-16 pr-6'>
-                                <h1 className="text-3xl font-bold mt-4">{blog.title}</h1>
-                                <div className="flex items-center text-gray-500 text-sm my-2">
-                                    <MdOutlineDateRange className="mr-1" />
-                                    {toFromNow(Date.parse(blog.$createdAt))}
+                            <div className='w-3/4'>
+                                <div className=' border-r-2 border-gray-200 pt-16 pr-6'>
+                                    <h1 className="text-3xl font-bold mt-4">{blog.title}</h1>
+                                    <div className="flex items-center text-gray-500 text-sm my-2">
+                                        <MdOutlineDateRange className="mr-1" />
+                                        {toFromNow(Date.parse(blog.$createdAt))}
+                                    </div>
+                                    <div className="mt-6 prose prose-slate max-w-none">
+                                        <Viewer value={blog.content} plugins={plugins} />
+                                    </div>
+
                                 </div>
-                                <div className="mt-6 prose prose-slate max-w-none">
-                                    <Viewer value={blog.content} plugins={plugins} />
-                                    {/* <div dangerouslySetInnerHTML={{ __html: blog.content || '<p>暂无内容</p>' }} /> */}
-                                </div>
+                                <div className='flex flex-wrap gap-2 mt-36'>
+                                    {blog.tags.map((tag: any) => (
+                                        <ArticleTag key={tag.tag_name} icon={getTagIcon(tag.tag_name)} tagName={tag.tag_name} />
+                                    ))}</div>
                             </div>
+
                             <div className="flex flex-col pl-8 pt-8">
                                 <div className="text-xl my-10">作者</div>
                                 <div className="flex items-center space-x-3 cursor-pointer">
