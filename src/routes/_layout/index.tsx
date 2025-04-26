@@ -1,6 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { TypeAnimation } from "react-type-animation";
-import React from 'react'
 import { cn } from '@/lib/utils'
 import { motion } from 'framer-motion'
 
@@ -171,7 +170,7 @@ function App() {
           className="text-base md:text-2xl text-muted-foreground tracking-widest"
           variants={itemVariants}
         >
-          我在这个网站记录我的成长，努力 💪 成为一个更好的程序员。
+          努力 💪 成为一个更好的工程师。
         </motion.p>
         
         <motion.div

@@ -15,8 +15,9 @@ import { Route as RegisterImport } from './routes/register'
 import { Route as LoginImport } from './routes/login'
 import { Route as LayoutImport } from './routes/_layout'
 import { Route as LayoutIndexImport } from './routes/_layout/index'
-import { Route as LayoutBlogImport } from './routes/_layout/blog'
 import { Route as LayoutAboutImport } from './routes/_layout/about'
+import { Route as LayoutBlogIndexImport } from './routes/_layout/blog.index'
+import { Route as LayoutBlogBlogIdImport } from './routes/_layout/blog.$blogId'
 
 // Create/Update Routes
 
@@ -43,15 +44,21 @@ const LayoutIndexRoute = LayoutIndexImport.update({
   getParentRoute: () => LayoutRoute,
 } as any)
 
-const LayoutBlogRoute = LayoutBlogImport.update({
-  id: '/blog',
-  path: '/blog',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
 const LayoutAboutRoute = LayoutAboutImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
+const LayoutBlogIndexRoute = LayoutBlogIndexImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
+const LayoutBlogBlogIdRoute = LayoutBlogBlogIdImport.update({
+  id: '/blog/$blogId',
+  path: '/blog/$blogId',
   getParentRoute: () => LayoutRoute,
 } as any)
 
@@ -87,18 +94,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutAboutImport
       parentRoute: typeof LayoutImport
     }
-    '/_layout/blog': {
-      id: '/_layout/blog'
-      path: '/blog'
-      fullPath: '/blog'
-      preLoaderRoute: typeof LayoutBlogImport
-      parentRoute: typeof LayoutImport
-    }
     '/_layout/': {
       id: '/_layout/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof LayoutIndexImport
+      parentRoute: typeof LayoutImport
+    }
+    '/_layout/blog/$blogId': {
+      id: '/_layout/blog/$blogId'
+      path: '/blog/$blogId'
+      fullPath: '/blog/$blogId'
+      preLoaderRoute: typeof LayoutBlogBlogIdImport
+      parentRoute: typeof LayoutImport
+    }
+    '/_layout/blog/': {
+      id: '/_layout/blog/'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof LayoutBlogIndexImport
       parentRoute: typeof LayoutImport
     }
   }
@@ -108,14 +122,16 @@ declare module '@tanstack/react-router' {
 
 interface LayoutRouteChildren {
   LayoutAboutRoute: typeof LayoutAboutRoute
-  LayoutBlogRoute: typeof LayoutBlogRoute
   LayoutIndexRoute: typeof LayoutIndexRoute
+  LayoutBlogBlogIdRoute: typeof LayoutBlogBlogIdRoute
+  LayoutBlogIndexRoute: typeof LayoutBlogIndexRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutAboutRoute: LayoutAboutRoute,
-  LayoutBlogRoute: LayoutBlogRoute,
   LayoutIndexRoute: LayoutIndexRoute,
+  LayoutBlogBlogIdRoute: LayoutBlogBlogIdRoute,
+  LayoutBlogIndexRoute: LayoutBlogIndexRoute,
 }
 
 const LayoutRouteWithChildren =
@@ -126,16 +142,18 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/about': typeof LayoutAboutRoute
-  '/blog': typeof LayoutBlogRoute
   '/': typeof LayoutIndexRoute
+  '/blog/$blogId': typeof LayoutBlogBlogIdRoute
+  '/blog': typeof LayoutBlogIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/about': typeof LayoutAboutRoute
-  '/blog': typeof LayoutBlogRoute
   '/': typeof LayoutIndexRoute
+  '/blog/$blogId': typeof LayoutBlogBlogIdRoute
+  '/blog': typeof LayoutBlogIndexRoute
 }
 
 export interface FileRoutesById {
@@ -144,23 +162,32 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/_layout/about': typeof LayoutAboutRoute
-  '/_layout/blog': typeof LayoutBlogRoute
   '/_layout/': typeof LayoutIndexRoute
+  '/_layout/blog/$blogId': typeof LayoutBlogBlogIdRoute
+  '/_layout/blog/': typeof LayoutBlogIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/login' | '/register' | '/about' | '/blog' | '/'
+  fullPaths:
+    | ''
+    | '/login'
+    | '/register'
+    | '/about'
+    | '/'
+    | '/blog/$blogId'
+    | '/blog'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/register' | '/about' | '/blog' | '/'
+  to: '/login' | '/register' | '/about' | '/' | '/blog/$blogId' | '/blog'
   id:
     | '__root__'
     | '/_layout'
     | '/login'
     | '/register'
     | '/_layout/about'
-    | '/_layout/blog'
     | '/_layout/'
+    | '/_layout/blog/$blogId'
+    | '/_layout/blog/'
   fileRoutesById: FileRoutesById
 }
 
@@ -195,8 +222,9 @@ export const routeTree = rootRoute
       "filePath": "_layout.tsx",
       "children": [
         "/_layout/about",
-        "/_layout/blog",
-        "/_layout/"
+        "/_layout/",
+        "/_layout/blog/$blogId",
+        "/_layout/blog/"
       ]
     },
     "/login": {
@@ -209,12 +237,16 @@ export const routeTree = rootRoute
       "filePath": "_layout/about.tsx",
       "parent": "/_layout"
     },
-    "/_layout/blog": {
-      "filePath": "_layout/blog.tsx",
-      "parent": "/_layout"
-    },
     "/_layout/": {
       "filePath": "_layout/index.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/blog/$blogId": {
+      "filePath": "_layout/blog.$blogId.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/blog/": {
+      "filePath": "_layout/blog.index.tsx",
       "parent": "/_layout"
     }
   }

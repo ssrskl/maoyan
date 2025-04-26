@@ -1,9 +1,8 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { databases } from '@/lib/appwrite';
-import { myfetch } from '@/lib/fetch';
 import { toFromNow } from '@/lib/time';
 import { useQuery } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate, Link } from '@tanstack/react-router'
 import { MdOutlineDateRange, MdOutlineRemoveRedEye } from "react-icons/md";
 import type { Models } from 'appwrite';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -52,7 +51,7 @@ const itemVariants = {
     }
 };
 
-export const Route = createFileRoute('/_layout/blog')({
+export const Route = createFileRoute('/_layout/blog/')({
     component: Blog,
 })
 
@@ -66,6 +65,10 @@ function Blog() {
             return response as BlogsResponse;
         },
     });
+    const navigate = useNavigate({from: '/blog'});
+    
+    console.log("博客列表已加载", blogs);
+    
     return <motion.div 
         className="flex justify-center pt-10"
         initial={{ opacity: 0 }}
@@ -143,20 +146,18 @@ function Blog() {
                                     transition: { duration: 0.2 }
                                 }}
                             >
-                                <div
-                                    className="flex flex-col rounded-lg bg-white h-full hover:bg-stone-200 p-4 cursor-pointer transition-all duration-300"
-                                    onClick={() => {
-                                        // 处理点击
-                                    }}
+                                <Link 
+                                    to="/blog/$blogId" 
+                                    params={{ blogId: blog.$id }}
+                                    className="flex flex-col rounded-lg bg-white h-full hover:bg-stone-200 p-4 transition-all duration-300"
                                 >
                                     <div className="flex items-center h-6 space-x-2">
                                         {blog.tags &&
-                                            blog.tags.map((tag) => (
-                                                <div className="text-gray-400 text-sm flex gap-1">
+                                            blog.tags.map((tag, tagIndex) => (
+                                                <div className="text-gray-400 text-sm flex gap-1" key={tagIndex}>
                                                     <p className="text-gray-400 text-sm hover:underline">
                                                         # {tag.tag_name}
                                                     </p>
-                                                    {/* <Icon icon={tag.tag_icon} className="w-4 h-4" /> */}
                                                 </div>
                                             ))}
                                     </div>
@@ -173,7 +174,7 @@ function Blog() {
                                             71
                                         </div>
                                     </div>
-                                </div>
+                                </Link>
                             </motion.li>
                         ))
                     ) : (
