@@ -29,7 +29,7 @@ export function RenderPlugin(): BytemdPlugin {
                     <div className="flex-col border-l-4 border-[#E6A700] p-4 bg-[#FFF8E6] rounded-lg my-2">
                         <div className="flex items-center space-x-2">
                             <div className="text-sm font-extrabold text-[#4F3A02]">
-                                信息
+                                警告
                             </div>
                         </div>
                         <div className="text-md mt-1 font-light">
@@ -43,7 +43,7 @@ export function RenderPlugin(): BytemdPlugin {
                     <div className="flex-col border-l-4 border-[#E13238] p-4 bg-[#FFEBEC] rounded-lg my-2">
                         <div className="flex items-center space-x-2">
                             <div className="text-sm font-extrabold text-[#6C393B]">
-                                信息
+                                危险
                             </div>
                         </div>
                         <div className="text-md mt-1 font-light">
@@ -57,7 +57,7 @@ export function RenderPlugin(): BytemdPlugin {
                     <div className="flex-col border-l-4 border-[#009400] p-4 bg-[#E6F6E6] rounded-lg my-2">
                         <div className="flex items-center space-x-2">
                             <div className="text-sm font-extrabold text-[#2A552A]">
-                                信息
+                                提示
                             </div>
                         </div>
                         <div className="text-md mt-1 font-light">

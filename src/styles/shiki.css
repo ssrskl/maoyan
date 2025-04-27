@@ -16,6 +16,7 @@
     background-color: var(--bgColor-highlighted-line-add);
     &::before{
         content: "+";
+        padding-left: 10px;
         background-color: var(--bgColor-highlighted-line-add);
         color: #18794E;
     }
@@ -25,7 +26,8 @@
     width: 100%;
     background-color: var(--bgColor-highlighted-line-remove);
     &::before{
-        content: "+";
+        content: "-";
+        padding-left: 10px;
         background-color: var(--bgColor-highlighted-line-remove);
         color: #CA8386;
     }
