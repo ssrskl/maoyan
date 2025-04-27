@@ -1,9 +1,6 @@
 import type { BytemdPlugin } from "bytemd";
 import remarkDirective from "remark-directive";
-import rehypeSlug from 'rehype-slug'
 import { visit } from 'unist-util-visit';
-import { createRoot } from "react-dom/client";
-import { Button } from "@/components/ui/button";
 
 function remarkDirectiveCustom(){
     return (tree) => {

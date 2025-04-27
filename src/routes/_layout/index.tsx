@@ -170,7 +170,7 @@ function App() {
           className="text-base md:text-2xl text-muted-foreground tracking-widest"
           variants={itemVariants}
         >
-          努力 💪 成为一个更好的工程师。
+          一花一世界，一叶一菩提。
         </motion.p>
         
         <motion.div

@@ -168,7 +168,7 @@ function Blog() {
                                         </div>
                                         <div className="text-gray-400 text-sm flex items-center gap-1">
                                             <MdOutlineRemoveRedEye />
-                                            71
+                                            {Math.floor(Math.random() * 1000)}
                                         </div>
                                     </div>
                                 </Link>

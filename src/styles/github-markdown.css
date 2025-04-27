@@ -121,6 +121,10 @@
       --color-prettylights-syntax-markup-ignored-bg: #0550ae;
       --color-prettylights-syntax-meta-diff-range: #8250df;
       --color-prettylights-syntax-sublimelinter-gutter-mark: #818b98;
+
+      --bgColor-highlighted-line: #f0f6fc;
+      --bgColor-highlighted-line-add: #DDF5ED;
+      --bgColor-highlighted-line-remove: ##FEECEF;
     }
   }
   
@@ -538,7 +542,6 @@
   .markdown-body ol,
   .markdown-body dl,
   .markdown-body table,
-  .markdown-body pre,
   .markdown-body details {
     margin-top: 0;
     margin-bottom: var(--base-size-16);
@@ -841,11 +844,11 @@
   }
   
   .markdown-body pre>code {
-    padding: 0;
+    padding: var(--base-size-16);
     margin: 0;
     word-break: normal;
     white-space: pre;
-    background: transparent;
+    background: var(--bgColor-muted);
     border: 0;
   }
   
@@ -860,13 +863,14 @@
   
   .markdown-body .highlight pre,
   .markdown-body pre {
-    padding: var(--base-size-16);
+    padding: 0px;
     overflow: auto;
-    font-size: 85%;
+    font-size: 95%;
     line-height: 1.45;
     color: var(--fgColor-default);
-    background-color: var(--bgColor-muted);
+    /* background-color: var(--bgColor-muted); */
     border-radius: 6px;
+    margin-bottom: var(--base-size-16);
   }
   
   .markdown-body pre code,

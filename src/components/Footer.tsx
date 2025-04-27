@@ -15,7 +15,7 @@ export default function Footer() {
                 </Avatar>
                 <h1 className="text-lg font-bold">猫颜的个人博客</h1>
               </div>
-              <p>个人简介</p>
+              <p className="text-zinc-700 text-sm">一花一世界，一叶一追寻</p>
               <p className="text-zinc-400">© 2023-2025 Maoyan, LLC</p>
               <div className="grid grid-cols-4">
                 <SiTencentqq className="border border-stone-300 w-9 h-9 p-2 rounded-full hover:bg-stone-200 cursor-pointer" />

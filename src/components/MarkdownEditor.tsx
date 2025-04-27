@@ -5,6 +5,9 @@ import 'bytemd/dist/index.css';
 import MarkdownTOC from './MarkdownTOC';
 import { cn } from '@/lib/utils';
 import BlockQuotePlugin from '@/plugins/BlockQuotePlugin';
+import AdmonitionPlugin from '@/plugins/AdmonitionPlugin';
+import LineHighlightPlugin from '@/plugins/LineHighlightPlugin';
+import highlight from '@bytemd/plugin-highlight';
 
 interface MarkdownEditorProps {
   initialValue?: string;
@@ -45,22 +48,34 @@ const headingAnchorPlugin = () => {
 const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
   initialValue = '',
   readOnly = false,
-  className,
+  className = '',
   onChange,
-  showTOC = true,
-  maxTOCDepth = 3,
+  showTOC = false,
+  maxTOCDepth = 3
 }) => {
   const [value, setValue] = useState(initialValue);
-  const plugins = [gfm(), headingAnchorPlugin(), BlockQuotePlugin()];
+  const [tab, setTab] = useState<'write' | 'preview'>('write');
 
+  // 根据传入的initialValue更新内部状态
   useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);
 
-  const handleChange = (val: string) => {
-    setValue(val);
+  // 插件配置
+  const plugins = [
+    gfm(),
+    highlight(),
+    headingAnchorPlugin(),
+    BlockQuotePlugin(),
+    AdmonitionPlugin(),
+    LineHighlightPlugin(),
+  ];
+
+  // 处理内容变化
+  const handleChange = (v: string) => {
+    setValue(v);
     if (onChange) {
-      onChange(val);
+      onChange(v);
     }
   };
 

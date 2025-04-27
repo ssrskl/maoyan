@@ -27,6 +27,8 @@ import CommonPlugin from '@/plugins/CommonPlugin'
 import BlockQuotePlugin from '@/plugins/BlockQuotePlugin'
 import { getTagIcon } from '@/components/TagIcons'
 import { motion } from 'framer-motion'
+import { ShikiPlugin } from '@/plugins/ShikiPlugin'
+import { ShikiPluginAlt } from '@/plugins/ShikiPluginAlt'
 
 export const Route = createFileRoute('/_layout/blog/$blogId')({
     component: BlogDetail,
@@ -57,8 +59,9 @@ function BlogDetail() {
     const { blogId } = useParams({ from: '/_layout/blog/$blogId' });
     const plugins = [
         gfm(),
-        highlight(),
+        // highlight(),
         CommonPlugin(),
+        ShikiPluginAlt(),
         AdmonitionPlugin(),
         BlockQuotePlugin(),
         RenderPlugin(),

@@ -7,9 +7,8 @@ import { routeTree } from './routeTree.gen'
 
 import '@/styles/styles.css'
 import '@/styles/github-markdown.css'
-import '@/styles/idea-light.css'
 import '@/styles/block-quote.css'
-// import '@/styles/juejin.css'
+import '@/styles/shiki.css'
 import reportWebVitals from './reportWebVitals.ts'
 import {  QueryClient, QueryClientProvider } from '@tanstack/react-query'
 

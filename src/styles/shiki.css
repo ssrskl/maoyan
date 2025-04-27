@@ -1,0 +1,32 @@
+.markdown-body pre .shiki{
+    padding: 12px;
+}
+
+
+.markdown-body code > span[class*="highlighted"] {
+    display: inline-block;
+    width: 100%;
+    background-color: var(--bgColor-highlighted-line);
+    filter: brightness(0.95);
+}
+
+.markdown-body pre[class*="has-diff"]>code > span[class*="add"] {
+    display: inline-block;
+    width: 100%;
+    background-color: var(--bgColor-highlighted-line-add);
+    &::before{
+        content: "+";
+        background-color: var(--bgColor-highlighted-line-add);
+        color: #18794E;
+    }
+}
+.markdown-body pre[class*="has-diff"]>code > span[class*="remove"] {
+    display: inline-block;
+    width: 100%;
+    background-color: var(--bgColor-highlighted-line-remove);
+    &::before{
+        content: "+";
+        background-color: var(--bgColor-highlighted-line-remove);
+        color: #CA8386;
+    }
+}

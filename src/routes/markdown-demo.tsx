@@ -8,78 +8,72 @@ import gfm from '@bytemd/plugin-gfm';
 import highlight from '@bytemd/plugin-highlight';
 import AdmonitionPlugin from '@/plugins/AdmonitionPlugin';
 import BlockQuotePlugin from '@/plugins/BlockQuotePlugin';
+import LineHighlightPlugin from '@/plugins/LineHighlightPlugin';
 import 'bytemd/dist/index.css';
 
 export const Route = createFileRoute('/markdown-demo')({
   component: MarkdownDemo
 });
 
-// Markdown示例内容，包含各种admonition指令
-const admonitionExample = `# Admonition 指令示例
+// 添加一个包含代码高亮示例的Markdown字符串
+const highlightExample = `
+## 代码行高亮示例
 
-这是一个展示如何使用 Markdown 指令创建提示框的示例。
+### 使用 highlight-next-line 注释
 
-## 信息提示
+\`\`\`javascript
+// 下面是一个简单的函数
+function hello(name) {
+  // highlight-next-line
+  return "Hello, " + name + "!";
+}
+console.log(hello("World"));
+\`\`\`
+
+### 使用行号指定高亮
+
+\`\`\`javascript {2,4-5}
+function sum(a, b) {
+  // 这行会被高亮
+  const result = a + b;
+  // 这行会被高亮
+  return result; // 这行会被高亮
+}
+\`\`\`
+`;
+
+// 添加提示框示例
+const admonitionExample = `
+# 提示框示例
 
 :::info
-这是一个信息提示框。
-可以包含**多行**内容和_格式化_文本。
+这是一个信息提示框
 :::
-
-## 注意提示
-
-:::note
-这是一个注意提示框。
-重要的信息应该放在这里。
-:::
-
-## 技巧提示
-
-:::tip
-这是一个技巧提示框。
-提供有用的小技巧和建议。
-:::
-
-## 警告提示
 
 :::warning
-这是一个警告提示框。
-用于提醒用户需要注意的重要事项。
+这是一个警告提示框
 :::
 
-## 危险提示
-
 :::danger
-这是一个危险提示框。
-表示可能导致严重后果的操作或信息。
+这是一个危险提示框
+:::
+
+:::success
+这是一个成功提示框
 :::
 `;
 
-// 块引用示例内容
-const blockQuoteExample = `# 块引用示例
+// 添加块引用示例
+const blockQuoteExample = `
+# 块引用示例
 
-这是一个展示如何使用特殊语法创建块引用的示例。
+这是一个普通段落。
 
-## 基本用法
+[[(猫颜的博客),(https://maoyan.me)]]
 
-使用 \`[[(名称),(链接URL)]]\` 格式可以快速创建一个带样式的引用链接：
+段落中的 [[(GitHub),(https://github.com)]] 引用。
 
-[[(百度搜索),(https://www.baidu.com)]]
-
-[[(GitHub),(https://github.com)]]
-
-## 在段落中使用
-
-你可以在段落中插入块引用链接，这里是一个例子：我们可以使用 [[(React官网),(https://react.dev)]] 来查看React的官方文档，或者访问 [[(MDN Web Docs),(https://developer.mozilla.org)]] 来查看Web开发相关文档。
-
-## 适用场景
-
-块引用链接适合用于：
-
-1. 文献引用和参考资料
-2. 相关文章和推荐阅读
-3. 定义术语的词汇表链接
-4. 外部资源链接的突出显示
+[[(Stack Overflow),(https://stackoverflow.com)]]
 `;
 
 function MarkdownDemo() {
@@ -88,7 +82,8 @@ function MarkdownDemo() {
     gfm(),
     highlight(),
     AdmonitionPlugin(),
-    BlockQuotePlugin()
+    BlockQuotePlugin(),
+    LineHighlightPlugin(),
   ];
   
   return (
@@ -99,6 +94,7 @@ function MarkdownDemo() {
         <TabsList className="mb-6">
           <TabsTrigger value="toc">目录示例</TabsTrigger>
           <TabsTrigger value="editor">编辑器示例</TabsTrigger>
+          <TabsTrigger value="highlight">代码高亮示例</TabsTrigger>
           <TabsTrigger value="admonition">提示框示例</TabsTrigger>
           <TabsTrigger value="blockquote">块引用示例</TabsTrigger>
         </TabsList>
@@ -125,39 +121,45 @@ function MarkdownDemo() {
           <MarkdownEditorExample />
         </TabsContent>
         
+        <TabsContent value="highlight" className="p-4 border rounded-lg">
+          <div className="mb-6">
+            <h2 className="text-xl font-semibold mb-2">代码行高亮示例</h2>
+            <p className="text-muted-foreground">
+              这个示例展示了如何在代码块中高亮特定行。支持两种方式：
+            </p>
+            <ol className="list-decimal pl-5 mt-2 text-muted-foreground">
+              <li>在代码中添加特殊注释 <code>// highlight-next-line</code></li>
+              <li>在代码块声明中指定行号 <code>```javascript {2,4-5}</code></li>
+            </ol>
+          </div>
+          <div className="border p-4 rounded-lg bg-white">
+            <Viewer value={highlightExample} plugins={plugins} />
+          </div>
+        </TabsContent>
+        
         <TabsContent value="admonition" className="p-4 border rounded-lg">
           <div className="mb-6">
-            <h2 className="text-xl font-semibold mb-2">Admonition 提示框效果</h2>
-            <p className="text-muted-foreground mb-6">
-              下面展示了各种提示框的实际效果，由 Markdown 指令生成。
+            <h2 className="text-xl font-semibold mb-2">提示框示例</h2>
+            <p className="text-muted-foreground">
+              这个示例展示了如何使用 AdmonitionPlugin 创建各种提示框。
+              提示框包括信息、警告、危险和成功四种类型。
             </p>
-            <div className="prose max-w-none dark:prose-invert">
-              <Viewer value={admonitionExample} plugins={plugins} />
-            </div>
           </div>
-          <div className="mt-8 p-4 bg-muted rounded-lg">
-            <h3 className="text-lg font-semibold mb-2">Markdown 源代码</h3>
-            <pre className="text-sm overflow-auto p-4 bg-background rounded-lg">
-              {admonitionExample}
-            </pre>
+          <div className="border p-4 rounded-lg bg-white">
+            <Viewer value={admonitionExample} plugins={plugins} />
           </div>
         </TabsContent>
         
         <TabsContent value="blockquote" className="p-4 border rounded-lg">
           <div className="mb-6">
-            <h2 className="text-xl font-semibold mb-2">块引用链接效果</h2>
-            <p className="text-muted-foreground mb-6">
-              下面展示了块引用链接的实际效果，使用特殊语法 [[(名称),(链接URL)]] 生成。
+            <h2 className="text-xl font-semibold mb-2">块引用示例</h2>
+            <p className="text-muted-foreground">
+              这个示例展示了如何使用 BlockQuotePlugin 创建引用块。
+              使用 [[(名称),(链接)]] 语法可以创建带有链接的引用。
             </p>
-            <div className="prose max-w-none dark:prose-invert">
-              <Viewer value={blockQuoteExample} plugins={plugins} />
-            </div>
           </div>
-          <div className="mt-8 p-4 bg-muted rounded-lg">
-            <h3 className="text-lg font-semibold mb-2">Markdown 源代码</h3>
-            <pre className="text-sm overflow-auto p-4 bg-background rounded-lg">
-              {blockQuoteExample}
-            </pre>
+          <div className="border p-4 rounded-lg bg-white">
+            <Viewer value={blockQuoteExample} plugins={plugins} />
           </div>
         </TabsContent>
       </Tabs>
