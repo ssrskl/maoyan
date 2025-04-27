@@ -1,6 +1,6 @@
 import type { BytemdPlugin } from "bytemd"
 import { codeToHtml } from 'shiki'
-import { transformerMetaHighlight, transformerNotationDiff, transformerNotationFocus, transformerNotationHighlight } from '@shikijs/transformers'
+import { transformerMetaHighlight, transformerNotationDiff, transformerNotationFocus, transformerNotationHighlight, transformerRemoveNotationEscape } from '@shikijs/transformers'
 
 export function ShikiPluginAlt(options?: any): BytemdPlugin {
   return {
@@ -20,6 +20,7 @@ export function ShikiPluginAlt(options?: any): BytemdPlugin {
             lang: lang || 'text',
             theme: 'one-light',
             transformers:[
+              transformerRemoveNotationEscape(),
               transformerNotationDiff(
                 {matchAlgorithm: "v3"}
               ),
@@ -29,9 +30,12 @@ export function ShikiPluginAlt(options?: any): BytemdPlugin {
                 }
               ),
               transformerMetaHighlight(
-                {}
+                {
+                  className: "highlighted"
+                }
               ),
               transformerNotationHighlight({matchAlgorithm: "v3"}),
+
             ]
           }
         )
