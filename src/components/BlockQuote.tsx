@@ -1,6 +1,8 @@
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { myfetch } from "@/lib/fetch";
 
 interface BlockQuoteProps {
   anchorName: string;
@@ -13,7 +15,29 @@ export default function BlockQuote({
   anchorLink,
 }: BlockQuoteProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const { data: icon } = useQuery({
+    queryKey: ['icon', anchorLink],
+    queryFn: async () => {
+      if (anchorLink.includes('http')){
+        const url = new URL(anchorLink)
+        // 使用公共 CORS 代理服务
+        const corsProxy = 'https://corsproxy.io/';
 
+        try {
+          const response = await fetch(corsProxy + url.origin + '/favicon.ico')
+          if (response.ok) {
+            const blob = await response.blob()
+            return URL.createObjectURL(blob)
+          }
+        } catch (error) {
+          console.error('Error fetching favicon:', error)
+        }
+        return null
+      } else {
+        return null
+      }
+    },
+  });
   return (
     <span
       className={cn(
@@ -24,6 +48,7 @@ export default function BlockQuote({
       onClick={() => window.open(anchorLink, '_blank')}
     >
       <span className="flex items-center">
+        {icon && <img src={icon} alt="icon" className="w-4 h-4 pr-2" />}
         <span className={cn("text-foreground text-xs font-medium",isHovered && "underline")}>{anchorName}</span>
         <ArrowRight
           className={cn(

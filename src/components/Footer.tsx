@@ -31,7 +31,7 @@ export default function Footer() {
                 <p className="text-sm">服务器运行中</p>
               </div>
             </div>
-            <div className=" text-gray-600 flex flex-col space-y-2">
+            <div className=" text-gray-600 md:flex md:flex-col space-y-2 sm:hidden">
               <div className="text-base font-bold text-black pb-3">产品</div>
               <p className="hover:font-bold cursor-pointer">更新进度</p>
               <p className="hover:font-bold cursor-pointer">价格与计划</p>
@@ -40,14 +40,14 @@ export default function Footer() {
               <p className="hover:font-bold cursor-pointer">社区版</p>
             </div>
     
-            <div className=" text-gray-600 flex flex-col space-y-2">
+            <div className=" text-gray-600 md:flex md:flex-col space-y-2 sm:hidden">
               <div className="text-base font-bold text-black pb-3">功能</div>
               <p className="hover:font-bold cursor-pointer">特性总览</p>
               <p className="hover:font-bold cursor-pointer">功能对比</p>
               <p className="hover:font-bold cursor-pointer">创新点</p>
             </div>
     
-            <div className=" text-gray-600 flex flex-col space-y-2">
+            <div className=" text-gray-600 md:flex md:flex-col space-y-2 sm:hidden">
               <div className="text-base font-bold text-black pb-3">资源</div>
               <p className="hover:font-bold cursor-pointer">博客</p>
               <p className="hover:font-bold cursor-pointer">论坛</p>
@@ -56,7 +56,7 @@ export default function Footer() {
               <p className="hover:font-bold cursor-pointer">用户反馈</p>
             </div>
     
-            <div className=" text-gray-600 flex flex-col space-y-2">
+            <div className=" text-gray-600 md:flex md:flex-col space-y-2 sm:hidden">
               <div className="text-base font-bold text-black pb-3">开源</div>
               <p className="hover:font-bold cursor-pointer">更新进度</p>
               <p className="hover:font-bold cursor-pointer">价格与计划</p>
@@ -65,7 +65,7 @@ export default function Footer() {
               <p className="hover:font-bold cursor-pointer">社区版</p>
             </div>
     
-            <div className=" text-gray-600 flex flex-col space-y-2">
+            <div className=" text-gray-600 md:flex md:flex-col space-y-2 sm:hidden">
               <div className="text-base font-bold text-black pb-3">关于</div>
               <p className="hover:font-bold cursor-pointer">关于我们</p>
               <p className="hover:font-bold cursor-pointer">服务条款</p>

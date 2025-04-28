@@ -1,10 +1,12 @@
 import { $fetch } from 'ofetch'
-export const myfetch = $fetch.create({
-    baseURL: 'https://cloud.appwrite.io/v1',
+export const myfetch = (url: string) => $fetch.create({
+    baseURL: url,
     headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json'
     },
+    credentials: 'include',
+    mode: 'cors',
     onRequest({ request }) {
         console.log('Making request to:', request.toString)
     },

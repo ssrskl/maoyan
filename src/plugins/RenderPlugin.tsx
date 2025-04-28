@@ -2,6 +2,7 @@ import type { BytemdPlugin } from "bytemd";
 import { createRoot } from "react-dom/client";
 import BlockQuote from "@/components/BlockQuote";
 import { FaCircleCheck, FaCircleExclamation, FaCircleInfo, FaCircleQuestion } from "react-icons/fa6";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export function RenderPlugin(): BytemdPlugin {
     return {
@@ -30,7 +31,7 @@ export function RenderPlugin(): BytemdPlugin {
                 createRoot(admonitionWarning).render(
                     <div className="flex-col border-l-4 border-[#E6A700] p-4 bg-[#FFF8E6] rounded-lg my-2">
                         <div className="flex items-center space-x-2">
-                        <FaCircleQuestion className="text-[#E6A700]" />
+                            <FaCircleQuestion className="text-[#E6A700]" />
                             <div className="text-sm font-extrabold text-[#4F3A02]">
                                 警告
                             </div>
@@ -72,16 +73,18 @@ export function RenderPlugin(): BytemdPlugin {
                 );
             });
 
-            // 处理所有block-quote元素
+            // 处理所有block-quote元素，，但是 tanstack 的 useQuery 需要包裹在 QueryClientProvider 中
             blockQuotes.forEach(blockQuote => {
                 const name = blockQuote.textContent;
                 const url = blockQuote.getAttribute('class')?.split(' ')[2];
                 if (name && url) {
                     createRoot(blockQuote).render(
-                        <BlockQuote
-                            anchorName={name}
-                            anchorLink={url}
-                        />
+                        <QueryClientProvider client={new QueryClient()}>
+                            <BlockQuote
+                                anchorName={name}
+                                anchorLink={url}
+                            />
+                        </QueryClientProvider>
                     );
                 }
             });

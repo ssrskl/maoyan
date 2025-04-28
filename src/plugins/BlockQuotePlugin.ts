@@ -5,67 +5,30 @@ import { visit } from "unist-util-visit";
 function remarkBlockQuote() {
     return (tree: any) => {
         visit(tree, "paragraph",(node: any) => {
-            // 查找文本节点中的[[(名称),(网址)]]模式
-            if (node.children && node.children.some((child: any) => 
-                child.type === 'text' && 
-                /\[\[\(.+?\),\(.+?\)\]\]/.test(child.value)
-            )) {
-                // 收集所有匹配的文本
+            if (node.children.length === 3 
+                && node.children[0].type === 'text' 
+                && node.children[1].type === 'link' 
+                && node.children[2].type === 'text'
+                && node.children[0].value[0] === '['
+                && node.children[2].value === ')]]'
+                ){
                 const newChildren: any[] = [];
-                
-                node.children.forEach((child: any) => {
-                    if (child.type === 'text') {
-                        // 分割文本，查找并处理匹配模式
-                        let lastIndex = 0;
-                        const regex = /\[\[\((.+?)\),\((.+?)\)\]\]/g;
-                        let match;
-                        
-                        while ((match = regex.exec(child.value)) !== null) {
-                            // 添加匹配前的文本
-                            if (match.index > lastIndex) {
-                                newChildren.push({
-                                    type: 'text',
-                                    value: child.value.substring(lastIndex, match.index)
-                                });
-                            }
-                            
-                            // 从匹配中提取名称和URL
-                            const [_, name, url] = match;
-                            
-                            // 创建一个新的节点，代表block-quote
-                            newChildren.push({
-                                type: 'blockQuoteLink',
-                                data: {
-                                    hName: 'span',
-                                    hProperties: {
-                                        className: cn('block-quote-cls inline-block', url),
-                                    }
-                                },
-                                children: [
-                                    {
-                                        type: 'text',
-                                        value: name
-                                    }
-                                ]
-                            });
-                            
-                            lastIndex = regex.lastIndex;
+                newChildren.push({
+                    type: 'blockQuoteLink',
+                    data: {
+                        hName: 'span',
+                        hProperties: {
+                            className: cn('block-quote-cls inline-block', node.children[1].url),
                         }
-                        
-                        // 添加剩余文本
-                        if (lastIndex < child.value.length) {
-                            newChildren.push({
-                                type: 'text',
-                                value: child.value.substring(lastIndex)
-                            });
+                    },
+                    children: [
+                        {
+                            type: 'text',
+                            value: node.children[0].value.slice(3, -3)
                         }
-                    } else {
-                        // 保留非文本节点
-                        newChildren.push(child);
-                    }
-                });
-                // 用新的children替换旧的
-                node.children = newChildren;
+                    ]
+                })
+                node.children = newChildren
             }
         });
     };

@@ -72,7 +72,7 @@ function Blog() {
         transition={{ duration: 0.5 }}
     >
         <motion.div 
-            className="flex w-2/3"
+            className="flex md:w-2/3 sm:w-full"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -107,7 +107,7 @@ function Blog() {
                 {/* 博客文章列表 */}
 
                 <motion.ul 
-                    className="grid grid-cols-2 gap-x-4 gap-y-10 w-full mt-6"
+                    className="grid md:grid-cols-2 gap-x-4 gap-y-10 w-full mt-6 list-none sm:grid-cols-1"
                     variants={containerVariants}
                 >
                     {isLoading ? (

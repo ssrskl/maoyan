@@ -172,7 +172,7 @@ function BlogDetail() {
                                 </motion.div>
                                 <div className="text-xl my-10">分享至</div>
                                 <motion.ul 
-                                    className="grid grid-cols-4 gap-2"
+                                    className="grid grid-cols-4 gap-2 list-none"
                                     variants={staggerContainer}
                                     initial="hidden"
                                     animate="visible"

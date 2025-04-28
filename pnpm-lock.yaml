@@ -71,6 +71,9 @@ importers:
       lucide-react:
         specifier: ^0.476.0
         version: 0.476.0(react@19.1.0)
+      mdast-util-to-string:
+        specifier: ^4.0.0
+        version: 4.0.0
       ofetch:
         specifier: ^1.4.1
         version: 1.4.1
@@ -3207,7 +3210,7 @@ snapshots:
 
   '@types/mdast@4.0.4':
     dependencies:
-      '@types/unist': 2.0.11
+      '@types/unist': 3.0.3
 
   '@types/ms@2.1.0': {}
 

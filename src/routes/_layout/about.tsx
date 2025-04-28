@@ -12,6 +12,7 @@ import {
     FaReact,
 } from "react-icons/fa";
 import {
+    SiApacheflink,
     SiApachehadoop,
     SiApachehive,
     SiApachekafka,
@@ -264,7 +265,9 @@ function About() {
                             <motion.div variants={iconVariants}><SiApachespark /></motion.div>
                             Spark +
                             <motion.div variants={iconVariants}><SiApachekafka /></motion.div>
-                            Kafka
+                            Kafka +
+                            <motion.div variants={iconVariants}><SiApacheflink /></motion.div>
+                            Flink
                         </motion.li>
                     </motion.ul>
 
