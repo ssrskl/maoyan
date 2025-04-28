@@ -12,13 +12,13 @@ import {
     SiX,
     SiZhihu,
 } from "react-icons/si";
-import { FaLink, FaLongArrowAltLeft } from "react-icons/fa";
+import { FaLink } from "react-icons/fa";
 import { Skeleton } from '@/components/ui/skeleton'
 import { MdOutlineDateRange } from 'react-icons/md'
 import { toFromNow } from '@/lib/time'
 import { Viewer } from '@bytemd/react'
 import gfm from '@bytemd/plugin-gfm'
-import highlight from '@bytemd/plugin-highlight'
+// import highlight from '@bytemd/plugin-highlight'
 import AdmonitionPlugin from '@/plugins/AdmonitionPlugin'
 import { RenderPlugin } from '@/plugins/RenderPlugin'
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
@@ -27,7 +27,7 @@ import CommonPlugin from '@/plugins/CommonPlugin'
 import BlockQuotePlugin from '@/plugins/BlockQuotePlugin'
 import { getTagIcon } from '@/components/TagIcons'
 import { motion } from 'framer-motion'
-import { ShikiPlugin } from '@/plugins/ShikiPlugin'
+// import { ShikiPlugin } from '@/plugins/ShikiPlugin'
 import { ShikiPluginAlt } from '@/plugins/ShikiPluginAlt'
 
 export const Route = createFileRoute('/_layout/blog/$blogId')({
@@ -141,7 +141,7 @@ function BlogDetail() {
                                     className='flex flex-wrap gap-2 mt-36'
                                     variants={staggerContainer}
                                 >
-                                    {blog.tags.map((tag: any, index: number) => (
+                                    {blog.tags.map((tag: any) => (
                                         <motion.div key={tag.tag_name} variants={slideUp}>
                                             <ArticleTag icon={getTagIcon(tag.tag_name)} tagName={tag.tag_name} />
                                         </motion.div>

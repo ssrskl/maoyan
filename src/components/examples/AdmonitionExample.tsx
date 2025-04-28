@@ -1,4 +1,3 @@
-import React from 'react';
 import { Admonition } from '../ui/admonition';
 
 export default function AdmonitionExample() {

@@ -1,7 +1,7 @@
 import type { BytemdPlugin } from "bytemd"
 import { createHighlighter, type Highlighter, type BundledLanguage, type BundledTheme } from 'shiki'
 
-export function ShikiPlugin(options?: any): BytemdPlugin {
+export function ShikiPlugin(): BytemdPlugin {
   return {
     viewerEffect({ markdownBody }) {
       const els = markdownBody.querySelectorAll<HTMLElement>('pre>code')

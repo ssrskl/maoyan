@@ -135,4 +135,11 @@ code {
   body {
     @apply bg-background text-foreground;
   }
+  /*  Tailwind 默认没有 ol, ul 的样式，需要手动添加 https://tailwindcss.com/docs/preflight#lists-are-unstyled*/
+  ol {
+    @apply list-decimal;
+  }
+  ul {
+    @apply list-disc;
+  }
 }

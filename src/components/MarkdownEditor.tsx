@@ -54,7 +54,7 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
   maxTOCDepth = 3
 }) => {
   const [value, setValue] = useState(initialValue);
-  const [tab, setTab] = useState<'write' | 'preview'>('write');
+  // const [tab, setTab] = useState<'write' | 'preview'>('write');
 
   // 根据传入的initialValue更新内部状态
   useEffect(() => {

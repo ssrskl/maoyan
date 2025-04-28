@@ -8,6 +8,10 @@
     width: 100%;
     background-color: var(--bgColor-highlighted-line);
     filter: brightness(0.95);
+    &:empty::before{
+        content: " ";
+        background-color: var(--bgColor-highlighted-line);
+    }
 }
 
 .markdown-body pre[class*="has-diff"]>code > span[class*="add"] {

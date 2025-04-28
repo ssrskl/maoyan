@@ -2,7 +2,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbS
 import { databases } from '@/lib/appwrite';
 import { toFromNow } from '@/lib/time';
 import { useQuery } from '@tanstack/react-query';
-import { createFileRoute, useNavigate, Link } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { MdOutlineDateRange, MdOutlineRemoveRedEye } from "react-icons/md";
 import type { Models } from 'appwrite';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -65,7 +65,6 @@ function Blog() {
             return response as BlogsResponse;
         },
     });
-    const navigate = useNavigate({from: '/blog'});
     return <motion.div 
         className="flex justify-center pt-10"
         initial={{ opacity: 0 }}
@@ -133,7 +132,7 @@ function Blog() {
                             </motion.li>
                         ))
                     ) : blogs ? (
-                        blogs.documents.map((blog, index) => (
+                        blogs.documents.map((blog) => (
                             <motion.li
                                 key={blog.$id}
                                 className="rounded-lg hover:shadow-lg"

@@ -17,7 +17,7 @@ export default function BlockQuote({
   return (
     <span
       className={cn(
-        "rounded-sm bg-muted px-2 py-1 flex max-w-fit shadow-md"
+        "rounded-sm bg-muted px-2 py-1 flex max-w-fit shadow-md cursor-pointer"
       )}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

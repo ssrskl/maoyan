@@ -1,4 +1,3 @@
-import React from 'react';
 import { IconInput } from '../ui/icon-input';
 
 // 这里我们使用一个简单的 SVG 图标作为示例

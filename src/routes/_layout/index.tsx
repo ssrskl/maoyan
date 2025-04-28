@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { TypeAnimation } from "react-type-animation";
 import { cn } from '@/lib/utils'
 import { motion } from 'framer-motion'
@@ -6,22 +6,7 @@ import { motion } from 'framer-motion'
 export const Route = createFileRoute('/_layout/')({
   component: App,
 })
-const UserIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-    <circle cx="12" cy="7" r="4" />
-  </svg>
-);
+
 
 // 定义容器动画变体
 const containerVariants = {
@@ -79,7 +64,8 @@ function App() {
   // 将文本拆分为单个字符以便应用波浪动画
   const text = "喜欢React、TypeScript和Java\\owo/ ~";
   const chars = Array.from(text);
-  
+  const navigate = useNavigate();
+
   return (
     <div key={1} className="grid place-content-center">
       <motion.div 
@@ -179,7 +165,7 @@ function App() {
         >
           <motion.div
             className="border-2 p-2 rounded-lg shadow-md cursor-pointer"
-            onClick={() => { }}
+            onClick={() => { navigate({ to: "/blog" }) }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -187,7 +173,7 @@ function App() {
           </motion.div>
           <motion.div
             className="border-2 p-2 rounded-lg shadow-md cursor-pointer"
-            onClick={() => { }}
+            onClick={() => { navigate({ to: "/about" }) }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >

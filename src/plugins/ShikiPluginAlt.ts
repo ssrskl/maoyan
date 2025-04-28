@@ -1,8 +1,18 @@
 import type { BytemdPlugin } from "bytemd"
 import { codeToHtml } from 'shiki'
-import { transformerMetaHighlight, transformerNotationDiff, transformerNotationFocus, transformerNotationHighlight, transformerRemoveNotationEscape } from '@shikijs/transformers'
+import { transformerNotationDiff, transformerNotationFocus, transformerNotationHighlight } from '@shikijs/transformers'
 
-export function ShikiPluginAlt(options?: any): BytemdPlugin {
+const customTransformer = {
+  name: 'highlight-empty-lines',
+  line(node: { children: string | any[]; properties: { className: string[]; }; }, lineNumber: any) {
+    if (!node.children.length) { // 检测空行
+      node.properties.className = ['empty-line-highlight'];
+    }
+    return node;
+  }
+};
+
+export function ShikiPluginAlt(): BytemdPlugin {
   return {
     viewerEffect({ markdownBody }) {
       const els = markdownBody.querySelectorAll<HTMLElement>('pre>code')
@@ -20,7 +30,6 @@ export function ShikiPluginAlt(options?: any): BytemdPlugin {
             lang: lang || 'text',
             theme: 'one-light',
             transformers:[
-              transformerRemoveNotationEscape(),
               transformerNotationDiff(
                 {matchAlgorithm: "v3"}
               ),
@@ -29,12 +38,7 @@ export function ShikiPluginAlt(options?: any): BytemdPlugin {
                   matchAlgorithm: "v3",
                 }
               ),
-              transformerMetaHighlight(
-                {
-                  className: "highlighted"
-                }
-              ),
-              transformerNotationHighlight({matchAlgorithm: "v3"}),
+              transformerNotationHighlight(),
 
             ]
           }

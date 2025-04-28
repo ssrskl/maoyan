@@ -75,18 +75,18 @@ const iconVariants = {
 };
 
 // 联系图标悬停动画
-const contactIconVariants = {
-    hover: { 
-        scale: 1.2,
-        rotate: [0, -5, 5, -5, 0],
-        transition: { 
-            duration: 0.3
-        }
-    },
-    tap: { 
-        scale: 0.9
-    }
-};
+// const contactIconVariants = {
+//     hover: { 
+//         scale: 1.2,
+//         rotate: [0, -5, 5, -5, 0],
+//         transition: { 
+//             duration: 0.3
+//         }
+//     },
+//     tap: { 
+//         scale: 0.9
+//     }
+// };
 
 function About() {
     return (

@@ -1,4 +1,3 @@
-import React from 'react';
 import { createFileRoute } from '@tanstack/react-router';
 import MarkdownTOCExample from '@/components/examples/MarkdownTOCExample';
 import MarkdownEditorExample from '@/components/examples/MarkdownEditorExample';
@@ -128,8 +127,6 @@ function MarkdownDemo() {
               这个示例展示了如何在代码块中高亮特定行。支持两种方式：
             </p>
             <ol className="list-decimal pl-5 mt-2 text-muted-foreground">
-              <li>在代码中添加特殊注释 <code>// highlight-next-line</code></li>
-              <li>在代码块声明中指定行号 <code>```javascript {2,4-5}</code></li>
             </ol>
           </div>
           <div className="border p-4 rounded-lg bg-white">
