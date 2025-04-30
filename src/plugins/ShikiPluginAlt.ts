@@ -2,15 +2,6 @@ import type { BytemdPlugin } from "bytemd"
 import { codeToHtml } from 'shiki'
 import { transformerNotationDiff, transformerNotationFocus, transformerNotationHighlight } from '@shikijs/transformers'
 
-const customTransformer = {
-  name: 'highlight-empty-lines',
-  line(node: { children: string | any[]; properties: { className: string[]; }; }, lineNumber: any) {
-    if (!node.children.length) { // 检测空行
-      node.properties.className = ['empty-line-highlight'];
-    }
-    return node;
-  }
-};
 
 export function ShikiPluginAlt(): BytemdPlugin {
   return {

@@ -9,7 +9,8 @@ function remarkDirectiveCustom() {
                 node.data = {
                     hName: 'div',
                     hProperties: {
-                        className: `admonition-${node.name}`
+                        className: `admonition-${node.name}`,
+                        dataComponent: node.name
                     }
                 }
             }
@@ -20,10 +21,8 @@ function remarkDirectiveCustom() {
 export default function AdmonitionPlugin(): BytemdPlugin {
     return {
         // 扩展 Remark 解析器，添加指令解析
-        remark: (processor) => processor.use(remarkDirective).use(
-            remarkDirectiveCustom
-        ),
-        // 扩展 Rehype 渲染器，处理指令节点
-        rehype: (processor)=>processor.use(()=>{}),
-        }
-    };
+        remark: (processor) => processor
+            .use(remarkDirective)
+            .use(remarkDirectiveCustom)
+    }
+};

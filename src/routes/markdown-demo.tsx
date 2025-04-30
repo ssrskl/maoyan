@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import MarkdownTOCExample from '@/components/examples/MarkdownTOCExample';
 import MarkdownEditorExample from '@/components/examples/MarkdownEditorExample';
+import AdmonitionExample from '@/components/examples/AdmonitionExample';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Viewer } from '@bytemd/react';
 import gfm from '@bytemd/plugin-gfm';
@@ -8,6 +9,8 @@ import highlight from '@bytemd/plugin-highlight';
 import AdmonitionPlugin from '@/plugins/AdmonitionPlugin';
 import BlockQuotePlugin from '@/plugins/BlockQuotePlugin';
 import LineHighlightPlugin from '@/plugins/LineHighlightPlugin';
+import RemarkExtensionPlugin from '@/plugins/RemarkExtensionPlugin';
+import { RenderPlugin } from '@/plugins/RenderPlugin';
 import 'bytemd/dist/index.css';
 
 export const Route = createFileRoute('/markdown-demo')({
@@ -75,6 +78,27 @@ const blockQuoteExample = `
 [[(Stack Overflow),(https://stackoverflow.com)]]
 `;
 
+// 添加自定义组件示例
+const customComponentExample = `
+# 自定义组件示例
+
+:::admonition type="info" title="自定义信息提示"
+这是使用自定义组件语法创建的信息提示框。
+:::
+
+:::admonition type="success" title="自定义成功提示"
+这是使用自定义组件语法创建的成功提示框，支持**Markdown格式**。
+:::
+
+:::admonition type="warning" title="自定义警告提示"
+这是使用自定义组件语法创建的警告提示框。
+:::
+
+:::admonition type="danger" title="自定义危险提示"
+这是使用自定义组件语法创建的危险提示框。
+:::
+`;
+
 function MarkdownDemo() {
   // 配置ByteMD插件
   const plugins = [
@@ -83,6 +107,8 @@ function MarkdownDemo() {
     AdmonitionPlugin(),
     BlockQuotePlugin(),
     LineHighlightPlugin(),
+    RemarkExtensionPlugin(),
+    RenderPlugin(),
   ];
   
   return (
@@ -96,6 +122,7 @@ function MarkdownDemo() {
           <TabsTrigger value="highlight">代码高亮示例</TabsTrigger>
           <TabsTrigger value="admonition">提示框示例</TabsTrigger>
           <TabsTrigger value="blockquote">块引用示例</TabsTrigger>
+          <TabsTrigger value="custom">自定义组件</TabsTrigger>
         </TabsList>
         
         <TabsContent value="toc" className="p-4 border rounded-lg">
@@ -157,6 +184,19 @@ function MarkdownDemo() {
           </div>
           <div className="border p-4 rounded-lg bg-white">
             <Viewer value={blockQuoteExample} plugins={plugins} />
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="custom" className="p-4 border rounded-lg">
+          <div className="mb-6">
+            <h2 className="text-xl font-semibold mb-2">自定义组件示例</h2>
+            <p className="text-muted-foreground">
+              这个示例展示了如何使用 RemarkExtensionPlugin 创建自定义组件。
+              使用 :::组件名 参数 内容 ::: 语法可以创建自定义组件。
+            </p>
+          </div>
+          <div className="border p-4 rounded-lg bg-white">
+            <Viewer value={customComponentExample} plugins={plugins} />
           </div>
         </TabsContent>
       </Tabs>

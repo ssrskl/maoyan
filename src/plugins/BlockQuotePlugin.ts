@@ -4,6 +4,8 @@ import { visit } from "unist-util-visit";
 
 function remarkBlockQuote() {
     return (tree: any) => {
+        console.log('remarkBlockQuote');
+        console.log(tree); 
         visit(tree, "paragraph",(node: any) => {
             if (node.children.length === 3 
                 && node.children[0].type === 'text' 
@@ -19,6 +21,8 @@ function remarkBlockQuote() {
                         hName: 'span',
                         hProperties: {
                             className: cn('block-quote-cls inline-block', node.children[1].url),
+                            dataComponent: 'block-quote',
+                            dataContent: 'Test Content'
                         }
                     },
                     children: [
@@ -34,8 +38,18 @@ function remarkBlockQuote() {
     };
 }
 
+function rehypeBlockQuote() {
+    return (tree: any) => {
+        visit(tree, "element", (node: any) => {
+            if (node.tagName === 'span' && node.properties.className.includes('block-quote-cls')) {
+                console.log(node.properties.dataContent);
+            }
+        });
+    };
+}
 export default function BlockQuotePlugin(): BytemdPlugin {
     return {
         remark: (processor) => processor.use(remarkBlockQuote),
+        rehype: (processor) => processor.use(rehypeBlockQuote),
     };
 }

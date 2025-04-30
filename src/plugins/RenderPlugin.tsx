@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import BlockQuote from "@/components/BlockQuote";
 import { FaCircleCheck, FaCircleExclamation, FaCircleInfo, FaCircleQuestion } from "react-icons/fa6";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { components } from "./RemarkExtensionPlugin";
 
 export function RenderPlugin(): BytemdPlugin {
     return {
@@ -12,7 +13,18 @@ export function RenderPlugin(): BytemdPlugin {
             const admonitionDanger = markdownBody.querySelectorAll('.admonition-danger');
             const admonitionSuccess = markdownBody.querySelectorAll('.admonition-success');
             const blockQuotes = markdownBody.querySelectorAll('.block-quote-cls');
+            const customNodes = markdownBody.querySelectorAll('.custom-node[data-component]');
+            // customNodes.forEach(node => {
+            //     const dataComponent = node.getAttribute('data-component');  
+            //     const dataProps = JSON.parse(node.getAttribute('data-props') || '{}');
+            //     if (dataComponent && dataComponent in components) {
+            //         const Component = components[dataComponent as keyof typeof components];
+            //         createRoot(node).render(<Component {...dataProps} />);
+            //     }
+            // });
+
             admonitionInfo.forEach(admonitionInfo => {
+                // console.log(admonitionInfo.getAttribute('data-component'));
                 createRoot(admonitionInfo).render(
                     <div className="flex-col border-l-4 border-[#52b1d2] p-4 bg-[#eef9fd] rounded-lg my-2">
                         <div className="flex items-center space-x-2">
@@ -88,6 +100,12 @@ export function RenderPlugin(): BytemdPlugin {
                     );
                 }
             });
+            // 清理函数
+            return () => {
+                customNodes.forEach(customNode => {
+                    createRoot(customNode).unmount();
+                });
+            }
         }
     }
 }

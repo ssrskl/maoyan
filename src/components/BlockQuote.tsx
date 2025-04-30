@@ -2,7 +2,6 @@ import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { myfetch } from "@/lib/fetch";
 
 interface BlockQuoteProps {
   anchorName: string;
