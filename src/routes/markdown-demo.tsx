@@ -1,7 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import MarkdownTOCExample from '@/components/examples/MarkdownTOCExample';
 import MarkdownEditorExample from '@/components/examples/MarkdownEditorExample';
-import AdmonitionExample from '@/components/examples/AdmonitionExample';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Viewer } from '@bytemd/react';
 import gfm from '@bytemd/plugin-gfm';
@@ -12,6 +11,8 @@ import LineHighlightPlugin from '@/plugins/LineHighlightPlugin';
 import RemarkExtensionPlugin from '@/plugins/RemarkExtensionPlugin';
 import { RenderPlugin } from '@/plugins/RenderPlugin';
 import 'bytemd/dist/index.css';
+import Like from '@/components/Like';
+import Bookmark from '@/components/Bookmark';
 
 export const Route = createFileRoute('/markdown-demo')({
   component: MarkdownDemo
@@ -113,7 +114,7 @@ function MarkdownDemo() {
   
   return (
     <div className="container mx-auto py-8 px-4">
-      <h1 className="text-3xl font-bold mb-8">Markdown 功能演示</h1>
+      <h1 className="text-3xl font-bold mb-8">测试</h1>
       
       <Tabs defaultValue="toc" className="w-full">
         <TabsList className="mb-6">
@@ -123,6 +124,7 @@ function MarkdownDemo() {
           <TabsTrigger value="admonition">提示框示例</TabsTrigger>
           <TabsTrigger value="blockquote">块引用示例</TabsTrigger>
           <TabsTrigger value="custom">自定义组件</TabsTrigger>
+          <TabsTrigger value="like">点赞示例</TabsTrigger>
         </TabsList>
         
         <TabsContent value="toc" className="p-4 border rounded-lg">
@@ -198,6 +200,10 @@ function MarkdownDemo() {
           <div className="border p-4 rounded-lg bg-white">
             <Viewer value={customComponentExample} plugins={plugins} />
           </div>
+        </TabsContent>
+        <TabsContent value="like" className="p-4 border rounded-lg">
+          <Like/>
+          <Bookmark/>
         </TabsContent>
       </Tabs>
     </div>

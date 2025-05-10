@@ -17,7 +17,6 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { MdOutlineDateRange } from 'react-icons/md'
 import { toFromNow } from '@/lib/time'
 import { Viewer } from '@bytemd/react'
-import type { Schema } from 'hast-util-sanitize'
 import gfm from '@bytemd/plugin-gfm'
 // import highlight from '@bytemd/plugin-highlight'
 import AdmonitionPlugin from '@/plugins/AdmonitionPlugin'
@@ -30,13 +29,11 @@ import { getTagIcon } from '@/components/TagIcons'
 import { motion } from 'framer-motion'
 // import { ShikiPlugin } from '@/plugins/ShikiPlugin'
 import { ShikiPluginAlt } from '@/plugins/ShikiPluginAlt'
-import TestPlugin from '@/plugins/TestPlugin'
-import RemarkExtensionPlugin from '@/plugins/RemarkExtensionPlugin'
-import { RehypeExtensionPlugin } from '@/plugins/RehypeExtensionPlugin'
-
-export const Route = createFileRoute('/_layout/blog/$blogId')({
-    component: BlogDetail,
-})
+import Like from '@/components/Like'
+import Bookmark from '@/components/Bookmark'
+import ShareButton from '@/components/ShareButton'
+import { Toaster } from '@/components/ui/toaster'
+import { useTitle } from 'ahooks'
 
 // 定义动画变体
 const fadeIn = {
@@ -58,7 +55,6 @@ const staggerContainer = {
         }
     }
 }
-
 function BlogDetail() {
     const { blogId } = useParams({ from: '/_layout/blog/$blogId' });
     const plugins = [
@@ -76,19 +72,19 @@ function BlogDetail() {
         queryKey: ['blog', blogId],
         queryFn: async () => {
             const response = await databases.getDocument(
-                '674ea924002fc5b22567',
-                '674ea93300318c2482e7',
+                'blog',
+                't_blog',
                 blogId
             )
-            // console.log(response);
+            console.log(response);
             return response
         },
         enabled: !!blogId
     })
-
-    // console.log("博客详情页面渲染", blogId, blog);
-
+    
+    useTitle(`猫颜的数字花园 | ${blog?.title}`)
     return <div className="flex justify-center pt-10">
+        <Toaster />
         <div className="flex w-2/3">
             <div className="gap-5 flex flex-col justify-center px-6 w-full">
                 <motion.div
@@ -117,6 +113,7 @@ function BlogDetail() {
                         </div>
                     ) : blog ? (
                         <div className='flex'>
+                            {/* 内容 */}
                             <motion.div
                                 className='w-3/4'
                                 variants={slideUp}
@@ -146,19 +143,46 @@ function BlogDetail() {
                                         }} />
                                     </motion.div>
 
+
+
                                 </div>
+                                {/* 标签 */}
                                 <motion.div
                                     className='flex flex-wrap gap-2 mt-36'
                                     variants={staggerContainer}
                                 >
-                                    {blog.tags.map((tag: any) => (
-                                        <motion.div key={tag.tag_name} variants={slideUp}>
+                                    {blog.tags.map((tag: any, index: number) => (
+                                        <motion.div
+                                            key={tag.tag_name}
+                                            initial="hidden"
+                                            transition={{
+                                                delay: index * 0.1,
+                                                duration: 0.5
+                                            }}
+                                        >
                                             <ArticleTag icon={getTagIcon(tag.tag_name)} tagName={tag.tag_name} />
                                         </motion.div>
                                     ))}
                                 </motion.div>
+                                {/* 点赞和收藏 */}
+                                <motion.div
+                                    className='flex flex-wrap gap-4 mt-36'
+                                >
+                                    <motion.div
+                                        initial="hidden"
+                                        transition={{ delay: 0.1 }}
+                                    >
+                                        <Like blogId={blogId} likeCount={blog?.likes} />
+                                    </motion.div>
+                                    <motion.div
+                                        initial="hidden"
+                                        transition={{ delay: 0.2 }}
+                                    >
+                                        <Bookmark />
+                                    </motion.div>
+                                </motion.div>
                             </motion.div>
-
+                            {/* 侧边栏 */}
                             <motion.div
                                 className="flex flex-col pl-8 pt-8"
                                 initial={{ opacity: 0, x: 20 }}
@@ -188,21 +212,24 @@ function BlogDetail() {
                                     animate="visible"
                                 >
                                     {[
-                                        <FaLink className="border w-9 h-9 p-2 rounded-full hover:bg-stone-200 cursor-pointer border-stone-300" />,
-                                        <SiTencentqq className="border w-9 h-9 p-2 rounded-full hover:bg-stone-200 cursor-pointer border-stone-300" />,
-                                        <SiWechat className="border w-9 h-9 p-2 rounded-full hover:bg-stone-200 cursor-pointer border-stone-300" />,
-                                        <SiSinaweibo className="border w-9 h-9 p-2 rounded-full hover:bg-stone-200 cursor-pointer border-stone-300" />,
-                                        <SiX className="border w-9 h-9 p-2 rounded-full hover:bg-stone-200 cursor-pointer border-stone-300" />,
-                                        <SiFacebook className="border w-9 h-9 p-2 rounded-full hover:bg-stone-200 cursor-pointer border-stone-300" />,
-                                        <SiGmail className="border w-9 h-9 p-2 rounded-full hover:bg-stone-200 cursor-pointer border-stone-300" />,
-                                        <SiZhihu className="border w-9 h-9 p-2 rounded-full hover:bg-stone-200 cursor-pointer border-stone-300" />
-                                    ].map((icon, index) => (
+                                        { icon: <FaLink />, platform: '复制链接' },
+                                        { icon: <SiTencentqq />, platform: 'QQ' },
+                                        { icon: <SiWechat />, platform: '微信' },
+                                        { icon: <SiSinaweibo />, platform: '微博' },
+                                        { icon: <SiX />, platform: 'X' },
+                                        { icon: <SiFacebook />, platform: 'Facebook' },
+                                        { icon: <SiGmail />, platform: 'Gmail' },
+                                        { icon: <SiZhihu />, platform: '知乎' }
+                                    ].map((shareItem, index) => (
                                         <motion.li
                                             key={index}
                                             variants={slideUp}
-                                            whileHover={{ scale: 1.1 }}
                                         >
-                                            {icon}
+                                            <ShareButton
+                                                icon={shareItem.icon}
+                                                platform={shareItem.platform}
+                                                title={blog?.title}
+                                            />
                                         </motion.li>
                                     ))}
                                 </motion.ul>
@@ -217,7 +244,10 @@ function BlogDetail() {
                                         maxDepth={3}
                                     />
                                 </motion.div>
+
                             </motion.div>
+                            <div>
+                            </div>
                         </div>
 
                     ) : (
@@ -235,3 +265,7 @@ function BlogDetail() {
         </div>
     </div>
 }
+
+export const Route = createFileRoute('/_layout/blog/$blogId')({
+    component: BlogDetail,
+})

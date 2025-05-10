@@ -3,7 +3,6 @@ import { createRoot } from "react-dom/client";
 import BlockQuote from "@/components/BlockQuote";
 import { FaCircleCheck, FaCircleExclamation, FaCircleInfo, FaCircleQuestion } from "react-icons/fa6";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { components } from "./RemarkExtensionPlugin";
 
 export function RenderPlugin(): BytemdPlugin {
     return {

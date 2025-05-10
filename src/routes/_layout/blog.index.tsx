@@ -60,8 +60,8 @@ function Blog() {
     const { data: blogs, isLoading } = useQuery<BlogsResponse>({
         queryKey: ['blogs'],
         queryFn: async () => {
-            const response = await databases.listDocuments('674ea924002fc5b22567',
-                '674ea93300318c2482e7');
+            const response = await databases.listDocuments('blog',
+                't_blog');
             return response as BlogsResponse;
         },
     });

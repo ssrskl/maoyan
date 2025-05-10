@@ -28,7 +28,7 @@ export default function Header() {
         <div className="h-16 flex-1 hidden sm:flex justify-end items-center gap-12 text-base font-medium mr-8">
           <Link to="/" className="hidden sm:flex" activeProps={{className: "text-primary font-bold underline"}} activeOptions={{exact:true}}>主页</Link>
           <Link to="/blog" className="hidden sm:flex" activeProps={{className: "text-primary font-bold underline"}}>博客</Link>
-          <Link to="/markdown-demo" className="hidden sm:flex" activeProps={{className: "text-primary font-bold underline"}}>Markdown演示</Link>
+          <Link to="/markdown-demo" className="hidden sm:flex" activeProps={{className: "text-primary font-bold underline"}}>测试</Link>
           <Link to="/about" className="hidden sm:flex" activeProps={{className: "text-primary font-bold underline"}}>关于我</Link>
         </div>
 

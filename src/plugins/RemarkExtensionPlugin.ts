@@ -25,7 +25,7 @@ function remarkExtension() {
             
             const match = fullText.match(componentRegex);
             if (match) {
-                const [, componentName, params, content] = match;
+                const [, componentName, params] = match;
                 // 检查是否是我们支持的组件
                 if (componentName in components) {
                     // 解析参数（如果有）
