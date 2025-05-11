@@ -13,6 +13,11 @@ import { RenderPlugin } from '@/plugins/RenderPlugin';
 import 'bytemd/dist/index.css';
 import Like from '@/components/Like';
 import Bookmark from '@/components/Bookmark';
+import { Button } from '@/components/ui/button';
+import MarkdownEditor from '@/components/MarkdownEditor';
+import { useState } from 'react';
+import CommonPlugin from '@/plugins/CommonPlugin';
+import { ShikiPluginAlt } from '@/plugins/ShikiPluginAlt';
 
 export const Route = createFileRoute('/markdown-demo')({
   component: MarkdownDemo
@@ -101,21 +106,27 @@ const customComponentExample = `
 `;
 
 function MarkdownDemo() {
-  // 配置ByteMD插件
+  const [isReadOnly, setIsReadOnly] = useState(false);
+  const [value, setValue] = useState('');
   const plugins = [
     gfm(),
-    highlight(),
     AdmonitionPlugin(),
     BlockQuotePlugin(),
-    LineHighlightPlugin(),
-    RemarkExtensionPlugin(),
+    // RemarkExtensionPlugin(),
+    // TestPlugin(),
+    // RehypeExtensionPlugin(),
+    CommonPlugin(),
+    ShikiPluginAlt(),
     RenderPlugin(),
-  ];
-  
+]
+  const handleToggleMode = () => {
+    setIsReadOnly(!isReadOnly);
+  };
+
   return (
     <div className="container mx-auto py-8 px-4">
       <h1 className="text-3xl font-bold mb-8">测试</h1>
-      
+
       <Tabs defaultValue="toc" className="w-full">
         <TabsList className="mb-6">
           <TabsTrigger value="toc">目录示例</TabsTrigger>
@@ -125,8 +136,9 @@ function MarkdownDemo() {
           <TabsTrigger value="blockquote">块引用示例</TabsTrigger>
           <TabsTrigger value="custom">自定义组件</TabsTrigger>
           <TabsTrigger value="like">点赞示例</TabsTrigger>
+          <TabsTrigger value="publish">发文示例</TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="toc" className="p-4 border rounded-lg">
           <div className="mb-6">
             <h2 className="text-xl font-semibold mb-2">Markdown 目录组件</h2>
@@ -137,7 +149,7 @@ function MarkdownDemo() {
           </div>
           <MarkdownTOCExample />
         </TabsContent>
-        
+
         <TabsContent value="editor" className="p-4 border rounded-lg">
           <div className="mb-6">
             <h2 className="text-xl font-semibold mb-2">Markdown 编辑器与目录</h2>
@@ -148,7 +160,7 @@ function MarkdownDemo() {
           </div>
           <MarkdownEditorExample />
         </TabsContent>
-        
+
         <TabsContent value="highlight" className="p-4 border rounded-lg">
           <div className="mb-6">
             <h2 className="text-xl font-semibold mb-2">代码行高亮示例</h2>
@@ -162,7 +174,7 @@ function MarkdownDemo() {
             <Viewer value={highlightExample} plugins={plugins} />
           </div>
         </TabsContent>
-        
+
         <TabsContent value="admonition" className="p-4 border rounded-lg">
           <div className="mb-6">
             <h2 className="text-xl font-semibold mb-2">提示框示例</h2>
@@ -175,7 +187,7 @@ function MarkdownDemo() {
             <Viewer value={admonitionExample} plugins={plugins} />
           </div>
         </TabsContent>
-        
+
         <TabsContent value="blockquote" className="p-4 border rounded-lg">
           <div className="mb-6">
             <h2 className="text-xl font-semibold mb-2">块引用示例</h2>
@@ -188,7 +200,7 @@ function MarkdownDemo() {
             <Viewer value={blockQuoteExample} plugins={plugins} />
           </div>
         </TabsContent>
-        
+
         <TabsContent value="custom" className="p-4 border rounded-lg">
           <div className="mb-6">
             <h2 className="text-xl font-semibold mb-2">自定义组件示例</h2>
@@ -202,8 +214,29 @@ function MarkdownDemo() {
           </div>
         </TabsContent>
         <TabsContent value="like" className="p-4 border rounded-lg">
-          <Like/>
-          <Bookmark/>
+          <Like />
+          <Bookmark />
+        </TabsContent>
+
+        <TabsContent value='publish' className='p-4 border rounded-lg'>
+          <div className="container mx-auto p-4">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold">Markdown 编辑器示例</h2>
+              <Button
+                onClick={handleToggleMode}
+                variant="default"
+              >
+                {isReadOnly ? '切换到编辑模式' : '切换到预览模式'}
+              </Button>
+            </div>
+
+            <MarkdownEditor
+              initialValue={value}
+              readOnly={isReadOnly}
+              onChange={setValue}
+              maxTOCDepth={3}
+            />
+          </div>
         </TabsContent>
       </Tabs>
     </div>

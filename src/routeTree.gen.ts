@@ -11,6 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as SearchImport } from './routes/search'
 import { Route as RegisterImport } from './routes/register'
 import { Route as MarkdownDemoImport } from './routes/markdown-demo'
 import { Route as LoginImport } from './routes/login'
@@ -21,6 +22,12 @@ import { Route as LayoutBlogIndexImport } from './routes/_layout/blog.index'
 import { Route as LayoutBlogBlogIdImport } from './routes/_layout/blog.$blogId'
 
 // Create/Update Routes
+
+const SearchRoute = SearchImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const RegisterRoute = RegisterImport.update({
   id: '/register',
@@ -101,6 +108,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterImport
       parentRoute: typeof rootRoute
     }
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchImport
+      parentRoute: typeof rootRoute
+    }
     '/_layout/about': {
       id: '/_layout/about'
       path: '/about'
@@ -156,6 +170,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/markdown-demo': typeof MarkdownDemoRoute
   '/register': typeof RegisterRoute
+  '/search': typeof SearchRoute
   '/about': typeof LayoutAboutRoute
   '/': typeof LayoutIndexRoute
   '/blog/$blogId': typeof LayoutBlogBlogIdRoute
@@ -166,6 +181,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/markdown-demo': typeof MarkdownDemoRoute
   '/register': typeof RegisterRoute
+  '/search': typeof SearchRoute
   '/about': typeof LayoutAboutRoute
   '/': typeof LayoutIndexRoute
   '/blog/$blogId': typeof LayoutBlogBlogIdRoute
@@ -178,6 +194,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/markdown-demo': typeof MarkdownDemoRoute
   '/register': typeof RegisterRoute
+  '/search': typeof SearchRoute
   '/_layout/about': typeof LayoutAboutRoute
   '/_layout/': typeof LayoutIndexRoute
   '/_layout/blog/$blogId': typeof LayoutBlogBlogIdRoute
@@ -191,6 +208,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/markdown-demo'
     | '/register'
+    | '/search'
     | '/about'
     | '/'
     | '/blog/$blogId'
@@ -200,6 +218,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/markdown-demo'
     | '/register'
+    | '/search'
     | '/about'
     | '/'
     | '/blog/$blogId'
@@ -210,6 +229,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/markdown-demo'
     | '/register'
+    | '/search'
     | '/_layout/about'
     | '/_layout/'
     | '/_layout/blog/$blogId'
@@ -222,6 +242,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   MarkdownDemoRoute: typeof MarkdownDemoRoute
   RegisterRoute: typeof RegisterRoute
+  SearchRoute: typeof SearchRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -229,6 +250,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   MarkdownDemoRoute: MarkdownDemoRoute,
   RegisterRoute: RegisterRoute,
+  SearchRoute: SearchRoute,
 }
 
 export const routeTree = rootRoute
@@ -244,7 +266,8 @@ export const routeTree = rootRoute
         "/_layout",
         "/login",
         "/markdown-demo",
-        "/register"
+        "/register",
+        "/search"
       ]
     },
     "/_layout": {
@@ -264,6 +287,9 @@ export const routeTree = rootRoute
     },
     "/register": {
       "filePath": "register.tsx"
+    },
+    "/search": {
+      "filePath": "search.tsx"
     },
     "/_layout/about": {
       "filePath": "_layout/about.tsx",
