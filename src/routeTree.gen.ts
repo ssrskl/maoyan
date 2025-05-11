@@ -17,6 +17,7 @@ import { Route as MarkdownDemoImport } from './routes/markdown-demo'
 import { Route as LoginImport } from './routes/login'
 import { Route as LayoutImport } from './routes/_layout'
 import { Route as LayoutIndexImport } from './routes/_layout/index'
+import { Route as LayoutTagsImport } from './routes/_layout/tags'
 import { Route as LayoutAboutImport } from './routes/_layout/about'
 import { Route as LayoutBlogIndexImport } from './routes/_layout/blog.index'
 import { Route as LayoutBlogBlogIdImport } from './routes/_layout/blog.$blogId'
@@ -55,6 +56,12 @@ const LayoutRoute = LayoutImport.update({
 const LayoutIndexRoute = LayoutIndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
+const LayoutTagsRoute = LayoutTagsImport.update({
+  id: '/tags',
+  path: '/tags',
   getParentRoute: () => LayoutRoute,
 } as any)
 
@@ -122,6 +129,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutAboutImport
       parentRoute: typeof LayoutImport
     }
+    '/_layout/tags': {
+      id: '/_layout/tags'
+      path: '/tags'
+      fullPath: '/tags'
+      preLoaderRoute: typeof LayoutTagsImport
+      parentRoute: typeof LayoutImport
+    }
     '/_layout/': {
       id: '/_layout/'
       path: '/'
@@ -150,6 +164,7 @@ declare module '@tanstack/react-router' {
 
 interface LayoutRouteChildren {
   LayoutAboutRoute: typeof LayoutAboutRoute
+  LayoutTagsRoute: typeof LayoutTagsRoute
   LayoutIndexRoute: typeof LayoutIndexRoute
   LayoutBlogBlogIdRoute: typeof LayoutBlogBlogIdRoute
   LayoutBlogIndexRoute: typeof LayoutBlogIndexRoute
@@ -157,6 +172,7 @@ interface LayoutRouteChildren {
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutAboutRoute: LayoutAboutRoute,
+  LayoutTagsRoute: LayoutTagsRoute,
   LayoutIndexRoute: LayoutIndexRoute,
   LayoutBlogBlogIdRoute: LayoutBlogBlogIdRoute,
   LayoutBlogIndexRoute: LayoutBlogIndexRoute,
@@ -172,6 +188,7 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
   '/about': typeof LayoutAboutRoute
+  '/tags': typeof LayoutTagsRoute
   '/': typeof LayoutIndexRoute
   '/blog/$blogId': typeof LayoutBlogBlogIdRoute
   '/blog': typeof LayoutBlogIndexRoute
@@ -183,6 +200,7 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
   '/about': typeof LayoutAboutRoute
+  '/tags': typeof LayoutTagsRoute
   '/': typeof LayoutIndexRoute
   '/blog/$blogId': typeof LayoutBlogBlogIdRoute
   '/blog': typeof LayoutBlogIndexRoute
@@ -196,6 +214,7 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/search': typeof SearchRoute
   '/_layout/about': typeof LayoutAboutRoute
+  '/_layout/tags': typeof LayoutTagsRoute
   '/_layout/': typeof LayoutIndexRoute
   '/_layout/blog/$blogId': typeof LayoutBlogBlogIdRoute
   '/_layout/blog/': typeof LayoutBlogIndexRoute
@@ -210,6 +229,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/search'
     | '/about'
+    | '/tags'
     | '/'
     | '/blog/$blogId'
     | '/blog'
@@ -220,6 +240,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/search'
     | '/about'
+    | '/tags'
     | '/'
     | '/blog/$blogId'
     | '/blog'
@@ -231,6 +252,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/search'
     | '/_layout/about'
+    | '/_layout/tags'
     | '/_layout/'
     | '/_layout/blog/$blogId'
     | '/_layout/blog/'
@@ -274,6 +296,7 @@ export const routeTree = rootRoute
       "filePath": "_layout.tsx",
       "children": [
         "/_layout/about",
+        "/_layout/tags",
         "/_layout/",
         "/_layout/blog/$blogId",
         "/_layout/blog/"
@@ -293,6 +316,10 @@ export const routeTree = rootRoute
     },
     "/_layout/about": {
       "filePath": "_layout/about.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/tags": {
+      "filePath": "_layout/tags.tsx",
       "parent": "/_layout"
     },
     "/_layout/": {

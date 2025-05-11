@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils';
 import { Link } from '@tanstack/react-router'
 import { useScroll } from 'ahooks';
 import { useState } from 'react';
-import { FaCat, FaGithub, FaRegLightbulb } from "react-icons/fa";
+import { FaCat, FaGithub, FaRegLightbulb, FaTags } from "react-icons/fa";
 import { SiSearxng } from "react-icons/si";
 import { SearchDialog } from './SearchDialog';
 
@@ -33,6 +33,7 @@ export default function Header() {
           <div className="h-16 flex-1 hidden sm:flex justify-end items-center gap-12 text-base font-medium mr-8">
             <Link to="/" className="hidden sm:flex" activeProps={{className: "text-primary font-bold underline"}} activeOptions={{exact:true}}>主页</Link>
             <Link to="/blog" className="hidden sm:flex" activeProps={{className: "text-primary font-bold underline"}}>博客</Link>
+            <Link to="/tags" className="hidden sm:flex" activeProps={{className: "text-primary font-bold underline"}}>标签</Link>
             <Link to="/markdown-demo" className="hidden sm:flex" activeProps={{className: "text-primary font-bold underline"}}>测试</Link>
             <Link to="/about" className="hidden sm:flex" activeProps={{className: "text-primary font-bold underline"}}>关于我</Link>
           </div>
@@ -43,6 +44,9 @@ export default function Header() {
               onClick={() => window.open("https://github.com/ssrskl")}
             />
             <FaRegLightbulb className="text-base w-8 h-8 p-2 rounded-lg hover:bg-gray-200 cursor-pointer hover:animate-wiggle" />
+            <Link to="/tags" className="sm:hidden">
+              <FaTags className="text-base w-8 h-8 p-2 rounded-lg hover:bg-gray-200 cursor-pointer hover:animate-wiggle" />
+            </Link>
             <SiSearxng
               className="text-base w-8 h-8 p-2 rounded-lg hover:bg-gray-200 cursor-pointer hover:animate-wiggle"
               onClick={() => {
