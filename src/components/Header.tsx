@@ -39,12 +39,12 @@ export default function Header() {
 
           <div className="flex sm:flex-none justify-end items-center space-x-2">
             <FaGithub
-              className="text-base w-8 h-8 p-2 rounded-lg hover:bg-gray-200 cursor-pointer"
+              className="text-base w-8 h-8 p-2 rounded-lg hover:bg-gray-200 cursor-pointer hover:animate-wiggle"
               onClick={() => window.open("https://github.com/ssrskl")}
             />
-            <FaRegLightbulb className="text-base w-8 h-8 p-2 rounded-lg hover:bg-gray-200 cursor-pointer " />
+            <FaRegLightbulb className="text-base w-8 h-8 p-2 rounded-lg hover:bg-gray-200 cursor-pointer hover:animate-wiggle" />
             <SiSearxng
-              className="text-base w-8 h-8 p-2 rounded-lg hover:bg-gray-200 cursor-pointer "
+              className="text-base w-8 h-8 p-2 rounded-lg hover:bg-gray-200 cursor-pointer hover:animate-wiggle"
               onClick={() => {
                 setSearchOpen(true);
               }}
@@ -53,6 +53,20 @@ export default function Header() {
         </div>
       </header>
       <SearchDialog open={searchOpen} onOpenChange={setSearchOpen} />
+
+      {/* 添加摆动动画的样式 */}
+      <style>{`
+        @keyframes wiggle {
+          0% { transform: rotate(0deg); }
+          25% { transform: rotate(-10deg); }
+          50% { transform: rotate(0deg); }
+          75% { transform: rotate(10deg); }
+          100% { transform: rotate(0deg); }
+        }
+        .hover\\:animate-wiggle:hover {
+          animation: wiggle 0.5s ease-in-out;
+        }
+      `}</style>
     </>
   )
 }

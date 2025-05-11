@@ -221,7 +221,7 @@ function MarkdownDemo() {
         <TabsContent value='publish' className='p-4 border rounded-lg'>
           <div className="container mx-auto p-4">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold">Markdown 编辑器示例</h2>
+              <h2 className="text-2xl font-bold">发布文章</h2>
               <Button
                 onClick={handleToggleMode}
                 variant="default"
@@ -237,6 +237,7 @@ function MarkdownDemo() {
               maxTOCDepth={3}
             />
           </div>
+          <Button className='mt-4'>发布</Button>
         </TabsContent>
       </Tabs>
     </div>
