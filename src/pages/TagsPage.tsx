@@ -1,19 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ArticleTag } from '@/components/ArticleTag';
 import { FiHash } from 'react-icons/fi';
-import {
-  FiCode,
-  FiCoffee,
-  FiBook,
-  FiMusic,
-  FiFilm,
-  FiHeart,
-  FiGlobe,
-  FiStar,
-  FiCamera,
-  FiTrendingUp
-} from 'react-icons/fi';
 import { Skeleton } from '@/components/ui/skeleton';
 import { motion } from 'framer-motion';
 import { databases } from '@/lib/appwrite';
@@ -148,7 +136,7 @@ const TagsPage: React.FC = () => {
                   className="flex flex-wrap gap-2 p-1"
                   variants={containerVariants}
                 >
-                  {tags && tags.map((tag, index) => (
+                  {tags && tags.map((tag: Tag) => (
                     <motion.div
                       key={tag.$id}
                       onClick={() => handleTagClick(tag.$id)}
@@ -195,7 +183,7 @@ const TagsPage: React.FC = () => {
                       variants={containerVariants}
                     >
                       {tags.find(t => t.$id === selectedTag)?.blogs.length > 0 ? (
-                        tags.find(t => t.$id === selectedTag)?.blogs.map((blog: any, index: number) => (
+                        tags.find(t => t.$id === selectedTag)?.blogs.map((blog: any) => (
                           <motion.li
                             key={blog.$id}
                             className="rounded-lg hover:shadow-lg"

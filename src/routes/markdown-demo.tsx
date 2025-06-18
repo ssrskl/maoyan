@@ -4,20 +4,21 @@ import MarkdownEditorExample from '@/components/examples/MarkdownEditorExample';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Viewer } from '@bytemd/react';
 import gfm from '@bytemd/plugin-gfm';
-import highlight from '@bytemd/plugin-highlight';
 import AdmonitionPlugin from '@/plugins/AdmonitionPlugin';
 import BlockQuotePlugin from '@/plugins/BlockQuotePlugin';
-import LineHighlightPlugin from '@/plugins/LineHighlightPlugin';
-import RemarkExtensionPlugin from '@/plugins/RemarkExtensionPlugin';
 import { RenderPlugin } from '@/plugins/RenderPlugin';
 import 'bytemd/dist/index.css';
 import Like from '@/components/Like';
 import Bookmark from '@/components/Bookmark';
 import { Button } from '@/components/ui/button';
 import MarkdownEditor from '@/components/MarkdownEditor';
-import { useState } from 'react';
+import { useState, type ClassAttributes, type HTMLAttributes } from 'react';
 import CommonPlugin from '@/plugins/CommonPlugin';
 import { ShikiPluginAlt } from '@/plugins/ShikiPluginAlt';
+import { CommentSection } from '@/components/CommentSection';
+import { MDXProvider } from '@mdx-js/react';
+import Class_Loader_Of_JVM from '@/blogs/java/Class-Loader-Of-JVM.mdx';
+import type { JSX } from 'react/jsx-runtime';
 
 export const Route = createFileRoute('/markdown-demo')({
   component: MarkdownDemo
@@ -105,6 +106,13 @@ const customComponentExample = `
 :::
 `;
 
+const commentExample = `
+# 评论示例
+
+这是一个评论示例。
+`;
+
+
 function MarkdownDemo() {
   const [isReadOnly, setIsReadOnly] = useState(false);
   const [value, setValue] = useState('');
@@ -122,7 +130,11 @@ function MarkdownDemo() {
   const handleToggleMode = () => {
     setIsReadOnly(!isReadOnly);
   };
-
+  const components = {
+    em(properties: JSX.IntrinsicAttributes & ClassAttributes<HTMLElement> & HTMLAttributes<HTMLElement>){
+      return <i {...properties} className='text-red-500' />
+    }
+  }
   return (
     <div className="container mx-auto py-8 px-4">
       <h1 className="text-3xl font-bold mb-8">测试</h1>
@@ -137,6 +149,8 @@ function MarkdownDemo() {
           <TabsTrigger value="custom">自定义组件</TabsTrigger>
           <TabsTrigger value="like">点赞示例</TabsTrigger>
           <TabsTrigger value="publish">发文示例</TabsTrigger>
+          <TabsTrigger value="comment">评论示例</TabsTrigger>
+          <TabsTrigger value="tag">MDX测试</TabsTrigger>
         </TabsList>
 
         <TabsContent value="toc" className="p-4 border rounded-lg">
@@ -214,7 +228,7 @@ function MarkdownDemo() {
           </div>
         </TabsContent>
         <TabsContent value="like" className="p-4 border rounded-lg">
-          <Like />
+          <Like blogId="123" />
           <Bookmark />
         </TabsContent>
 
@@ -238,6 +252,53 @@ function MarkdownDemo() {
             />
           </div>
           <Button className='mt-4'>发布</Button>
+        </TabsContent>
+        <TabsContent value='comment' className='p-4 border rounded-lg'>
+          <CommentSection 
+            comments={[
+              {
+                id: '1',
+                content: '这是一个评论',
+                user: {
+                  name: '张三',
+                  avatarUrl: 'https://example.com/avatar.jpg'
+                },
+                timestamp: '2021-01-01 12:00:00',
+                replies:[
+                  {
+                    id: '2',
+                    content: '这是一个回复',
+                    user: {
+                      name: '李四',
+                      avatarUrl: 'https://example.com/avatar.jpg'
+                    },
+                    timestamp: '2021-01-01 12:00:01',
+                    replies:[
+                      {
+                        id: '3',
+                        content: '这是一个回复的回复',
+                        user: {
+                          name: '王五',
+                          avatarUrl: 'https://example.com/avatar.jpg'
+                        },
+                        timestamp: '2021-01-01 12:00:02',
+                      }
+                    ]
+                  }
+                ]
+              },              
+            ]} 
+            onCommentSubmit={() => {}} 
+            onReplySubmit={() => {}} 
+          />
+        </TabsContent>
+        <TabsContent value='tag' className='p-4 border rounded-lg'>
+          <div className="container mx-auto p-4 markdown-body">
+            <h2 className="text-2xl font-bold">MDX测试</h2>
+            <MDXProvider components={components}>
+              <Class_Loader_Of_JVM />
+            </MDXProvider>
+          </div>
         </TabsContent>
       </Tabs>
     </div>

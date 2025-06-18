@@ -8,181 +8,69 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-// Import Routes
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as SearchRouteImport } from './routes/search'
+import { Route as RegisterRouteImport } from './routes/register'
+import { Route as MarkdownDemoRouteImport } from './routes/markdown-demo'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as LayoutRouteImport } from './routes/_layout'
+import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
+import { Route as LayoutTagsRouteImport } from './routes/_layout/tags'
+import { Route as LayoutAboutRouteImport } from './routes/_layout/about'
+import { Route as LayoutBlogIndexRouteImport } from './routes/_layout/blog.index'
+import { Route as LayoutBlogBlogIdRouteImport } from './routes/_layout/blog.$blogId'
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as SearchImport } from './routes/search'
-import { Route as RegisterImport } from './routes/register'
-import { Route as MarkdownDemoImport } from './routes/markdown-demo'
-import { Route as LoginImport } from './routes/login'
-import { Route as LayoutImport } from './routes/_layout'
-import { Route as LayoutIndexImport } from './routes/_layout/index'
-import { Route as LayoutTagsImport } from './routes/_layout/tags'
-import { Route as LayoutAboutImport } from './routes/_layout/about'
-import { Route as LayoutBlogIndexImport } from './routes/_layout/blog.index'
-import { Route as LayoutBlogBlogIdImport } from './routes/_layout/blog.$blogId'
-
-// Create/Update Routes
-
-const SearchRoute = SearchImport.update({
+const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const RegisterRoute = RegisterImport.update({
+const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const MarkdownDemoRoute = MarkdownDemoImport.update({
+const MarkdownDemoRoute = MarkdownDemoRouteImport.update({
   id: '/markdown-demo',
   path: '/markdown-demo',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const LoginRoute = LoginImport.update({
+const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const LayoutRoute = LayoutImport.update({
+const LayoutRoute = LayoutRouteImport.update({
   id: '/_layout',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const LayoutIndexRoute = LayoutIndexImport.update({
+const LayoutIndexRoute = LayoutIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => LayoutRoute,
 } as any)
-
-const LayoutTagsRoute = LayoutTagsImport.update({
+const LayoutTagsRoute = LayoutTagsRouteImport.update({
   id: '/tags',
   path: '/tags',
   getParentRoute: () => LayoutRoute,
 } as any)
-
-const LayoutAboutRoute = LayoutAboutImport.update({
+const LayoutAboutRoute = LayoutAboutRouteImport.update({
   id: '/about',
   path: '/about',
   getParentRoute: () => LayoutRoute,
 } as any)
-
-const LayoutBlogIndexRoute = LayoutBlogIndexImport.update({
+const LayoutBlogIndexRoute = LayoutBlogIndexRouteImport.update({
   id: '/blog/',
   path: '/blog/',
   getParentRoute: () => LayoutRoute,
 } as any)
-
-const LayoutBlogBlogIdRoute = LayoutBlogBlogIdImport.update({
+const LayoutBlogBlogIdRoute = LayoutBlogBlogIdRouteImport.update({
   id: '/blog/$blogId',
   path: '/blog/$blogId',
   getParentRoute: () => LayoutRoute,
 } as any)
 
-// Populate the FileRoutesByPath interface
-
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {
-    '/_layout': {
-      id: '/_layout'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof LayoutImport
-      parentRoute: typeof rootRoute
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginImport
-      parentRoute: typeof rootRoute
-    }
-    '/markdown-demo': {
-      id: '/markdown-demo'
-      path: '/markdown-demo'
-      fullPath: '/markdown-demo'
-      preLoaderRoute: typeof MarkdownDemoImport
-      parentRoute: typeof rootRoute
-    }
-    '/register': {
-      id: '/register'
-      path: '/register'
-      fullPath: '/register'
-      preLoaderRoute: typeof RegisterImport
-      parentRoute: typeof rootRoute
-    }
-    '/search': {
-      id: '/search'
-      path: '/search'
-      fullPath: '/search'
-      preLoaderRoute: typeof SearchImport
-      parentRoute: typeof rootRoute
-    }
-    '/_layout/about': {
-      id: '/_layout/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof LayoutAboutImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/tags': {
-      id: '/_layout/tags'
-      path: '/tags'
-      fullPath: '/tags'
-      preLoaderRoute: typeof LayoutTagsImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/': {
-      id: '/_layout/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof LayoutIndexImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/blog/$blogId': {
-      id: '/_layout/blog/$blogId'
-      path: '/blog/$blogId'
-      fullPath: '/blog/$blogId'
-      preLoaderRoute: typeof LayoutBlogBlogIdImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/blog/': {
-      id: '/_layout/blog/'
-      path: '/blog'
-      fullPath: '/blog'
-      preLoaderRoute: typeof LayoutBlogIndexImport
-      parentRoute: typeof LayoutImport
-    }
-  }
-}
-
-// Create and export the route tree
-
-interface LayoutRouteChildren {
-  LayoutAboutRoute: typeof LayoutAboutRoute
-  LayoutTagsRoute: typeof LayoutTagsRoute
-  LayoutIndexRoute: typeof LayoutIndexRoute
-  LayoutBlogBlogIdRoute: typeof LayoutBlogBlogIdRoute
-  LayoutBlogIndexRoute: typeof LayoutBlogIndexRoute
-}
-
-const LayoutRouteChildren: LayoutRouteChildren = {
-  LayoutAboutRoute: LayoutAboutRoute,
-  LayoutTagsRoute: LayoutTagsRoute,
-  LayoutIndexRoute: LayoutIndexRoute,
-  LayoutBlogBlogIdRoute: LayoutBlogBlogIdRoute,
-  LayoutBlogIndexRoute: LayoutBlogIndexRoute,
-}
-
-const LayoutRouteWithChildren =
-  LayoutRoute._addFileChildren(LayoutRouteChildren)
-
 export interface FileRoutesByFullPath {
-  '': typeof LayoutRouteWithChildren
   '/login': typeof LoginRoute
   '/markdown-demo': typeof MarkdownDemoRoute
   '/register': typeof RegisterRoute
@@ -193,7 +81,6 @@ export interface FileRoutesByFullPath {
   '/blog/$blogId': typeof LayoutBlogBlogIdRoute
   '/blog': typeof LayoutBlogIndexRoute
 }
-
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/markdown-demo': typeof MarkdownDemoRoute
@@ -205,9 +92,8 @@ export interface FileRoutesByTo {
   '/blog/$blogId': typeof LayoutBlogBlogIdRoute
   '/blog': typeof LayoutBlogIndexRoute
 }
-
 export interface FileRoutesById {
-  __root__: typeof rootRoute
+  __root__: typeof rootRouteImport
   '/_layout': typeof LayoutRouteWithChildren
   '/login': typeof LoginRoute
   '/markdown-demo': typeof MarkdownDemoRoute
@@ -219,11 +105,9 @@ export interface FileRoutesById {
   '/_layout/blog/$blogId': typeof LayoutBlogBlogIdRoute
   '/_layout/blog/': typeof LayoutBlogIndexRoute
 }
-
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | ''
     | '/login'
     | '/markdown-demo'
     | '/register'
@@ -258,7 +142,6 @@ export interface FileRouteTypes {
     | '/_layout/blog/'
   fileRoutesById: FileRoutesById
 }
-
 export interface RootRouteChildren {
   LayoutRoute: typeof LayoutRouteWithChildren
   LoginRoute: typeof LoginRoute
@@ -267,6 +150,100 @@ export interface RootRouteChildren {
   SearchRoute: typeof SearchRoute
 }
 
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/markdown-demo': {
+      id: '/markdown-demo'
+      path: '/markdown-demo'
+      fullPath: '/markdown-demo'
+      preLoaderRoute: typeof MarkdownDemoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_layout': {
+      id: '/_layout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof LayoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_layout/': {
+      id: '/_layout/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof LayoutIndexRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/tags': {
+      id: '/_layout/tags'
+      path: '/tags'
+      fullPath: '/tags'
+      preLoaderRoute: typeof LayoutTagsRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/about': {
+      id: '/_layout/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof LayoutAboutRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/blog/': {
+      id: '/_layout/blog/'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof LayoutBlogIndexRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/blog/$blogId': {
+      id: '/_layout/blog/$blogId'
+      path: '/blog/$blogId'
+      fullPath: '/blog/$blogId'
+      preLoaderRoute: typeof LayoutBlogBlogIdRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+  }
+}
+
+interface LayoutRouteChildren {
+  LayoutAboutRoute: typeof LayoutAboutRoute
+  LayoutTagsRoute: typeof LayoutTagsRoute
+  LayoutIndexRoute: typeof LayoutIndexRoute
+  LayoutBlogBlogIdRoute: typeof LayoutBlogBlogIdRoute
+  LayoutBlogIndexRoute: typeof LayoutBlogIndexRoute
+}
+
+const LayoutRouteChildren: LayoutRouteChildren = {
+  LayoutAboutRoute: LayoutAboutRoute,
+  LayoutTagsRoute: LayoutTagsRoute,
+  LayoutIndexRoute: LayoutIndexRoute,
+  LayoutBlogBlogIdRoute: LayoutBlogBlogIdRoute,
+  LayoutBlogIndexRoute: LayoutBlogIndexRoute,
+}
+
+const LayoutRouteWithChildren =
+  LayoutRoute._addFileChildren(LayoutRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   LayoutRoute: LayoutRouteWithChildren,
   LoginRoute: LoginRoute,
@@ -274,66 +251,6 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterRoute: RegisterRoute,
   SearchRoute: SearchRoute,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/_layout",
-        "/login",
-        "/markdown-demo",
-        "/register",
-        "/search"
-      ]
-    },
-    "/_layout": {
-      "filePath": "_layout.tsx",
-      "children": [
-        "/_layout/about",
-        "/_layout/tags",
-        "/_layout/",
-        "/_layout/blog/$blogId",
-        "/_layout/blog/"
-      ]
-    },
-    "/login": {
-      "filePath": "login.tsx"
-    },
-    "/markdown-demo": {
-      "filePath": "markdown-demo.tsx"
-    },
-    "/register": {
-      "filePath": "register.tsx"
-    },
-    "/search": {
-      "filePath": "search.tsx"
-    },
-    "/_layout/about": {
-      "filePath": "_layout/about.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/tags": {
-      "filePath": "_layout/tags.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/": {
-      "filePath": "_layout/index.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/blog/$blogId": {
-      "filePath": "_layout/blog.$blogId.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/blog/": {
-      "filePath": "_layout/blog.index.tsx",
-      "parent": "/_layout"
-    }
-  }
-}
-ROUTE_MANIFEST_END */

@@ -74,10 +74,7 @@ const MarkdownEditorExample: React.FC = () => {
       <MarkdownEditor
         initialValue={value}
         readOnly={isReadOnly}
-        onChange={setValue}
-        showTOC={true}
-        maxTOCDepth={3}
-      />
+        onChange={setValue}      />
     </div>
   );
 };

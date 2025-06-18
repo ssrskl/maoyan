@@ -15,7 +15,7 @@ import {
 import { FaLink } from "react-icons/fa";
 import { Skeleton } from '@/components/ui/skeleton'
 import { MdOutlineDateRange } from 'react-icons/md'
-import { toFromNow } from '@/lib/time'
+import { TimeFormatter, toFromNow } from '@/lib/time'
 import { Viewer } from '@bytemd/react'
 import gfm from '@bytemd/plugin-gfm'
 // import highlight from '@bytemd/plugin-highlight'
@@ -34,6 +34,9 @@ import Bookmark from '@/components/Bookmark'
 import ShareButton from '@/components/ShareButton'
 import { Toaster } from '@/components/ui/toaster'
 import { useTitle } from 'ahooks'
+import { CommentSection } from '@/components/CommentSection'
+import { Query } from 'appwrite'
+import { buildCommentTree, type ResponseComment } from '@/lib/utils'
 
 // 定义动画变体
 const fadeIn = {
@@ -62,7 +65,7 @@ function BlogDetail() {
         AdmonitionPlugin(),
         BlockQuotePlugin(),
         CommonPlugin(),
-        ShikiPluginAlt(),
+        // ShikiPluginAlt(),
         RenderPlugin(),
     ]
     const { data: blog, isLoading } = useQuery({
@@ -77,6 +80,30 @@ function BlogDetail() {
             return response
         },
         enabled: !!blogId
+    })
+    const { data: comments} = useQuery({
+        queryKey: ['comments', blogId],
+        queryFn: async () => {
+            const response = await databases.listDocuments('blog', 't_comment', [Query.equal('blog_id', blogId)])
+            console.log(response.documents)
+            const responseComments:ResponseComment[] =[]
+            response.documents?.forEach(responseComment=>{
+                responseComments.push({
+                    $collectionId : responseComment.$collectionId,
+                    $createdAt : responseComment.$createdAt,
+                    $id : responseComment.$id,
+                    $updatedAt : responseComment.$updatedAt,
+                    avatarUrl : responseComment.avatarUrl,
+                    blog_id : responseComment.blog_id,
+                    content : responseComment.content,
+                    id : responseComment.id,
+                    reply_id : responseComment.reply_id,
+                    username : responseComment.username,
+                })
+            });
+            const commentTree =  buildCommentTree(responseComments)
+            return commentTree
+        }
     })
     
     useTitle(`猫颜的数字花园 | ${blog?.title}`)
@@ -169,7 +196,7 @@ function BlogDetail() {
                                         initial="hidden"
                                         transition={{ delay: 0.1 }}
                                     >
-                                        <Like blogId={blogId} likeCount={blog?.likes} />
+                                        <Like blogId={blogId} />
                                     </motion.div>
                                     <motion.div
                                         initial="hidden"
@@ -177,6 +204,16 @@ function BlogDetail() {
                                     >
                                         <Bookmark />
                                     </motion.div>
+                                </motion.div>
+                                {/* 评论 */}
+                                <motion.div
+                                    className='mt-10'
+                                >
+                                    <CommentSection 
+                                        comments={comments}
+                                        onCommentSubmit={() => {}}
+                                        onReplySubmit={() => {}}
+                                    />
                                 </motion.div>
                             </motion.div>
                             {/* 侧边栏 */}
