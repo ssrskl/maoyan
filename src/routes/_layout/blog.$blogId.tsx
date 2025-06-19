@@ -27,8 +27,6 @@ import CommonPlugin from '@/plugins/CommonPlugin'
 import BlockQuotePlugin from '@/plugins/BlockQuotePlugin'
 import { getTagIcon } from '@/components/TagIcons'
 import { motion } from 'framer-motion'
-// import { ShikiPlugin } from '@/plugins/ShikiPlugin'
-import { ShikiPluginAlt } from '@/plugins/ShikiPluginAlt'
 import Like from '@/components/Like'
 import Bookmark from '@/components/Bookmark'
 import ShareButton from '@/components/ShareButton'
@@ -37,6 +35,7 @@ import { useTitle } from 'ahooks'
 import { CommentSection } from '@/components/CommentSection'
 import { Query } from 'appwrite'
 import { buildCommentTree, type ResponseComment } from '@/lib/utils'
+import MDXProviderPlus from '@/components/MDXProviderPlus'
 
 // 定义动画变体
 const fadeIn = {
@@ -160,11 +159,12 @@ function BlogDetail() {
                                         className="mt-6 prose prose-slate max-w-none"
                                         variants={slideUp}
                                     >
-                                        <Viewer value={blog.content} plugins={plugins} sanitize={(schema: any) => {
+                                        <MDXProviderPlus blogId={blogId}/>
+                                        {/* <Viewer value={blog.content} plugins={plugins} sanitize={(schema: any) => {
                                             schema.attributes['*'].push('dataComponent')
                                             schema.attributes['*'].push('dataProps')
                                             return schema
-                                        }} />
+                                        }} /> */}
                                     </motion.div>
 
 
@@ -274,7 +274,7 @@ function BlogDetail() {
                                     transition={{ duration: 0.5, delay: 0.6 }}
                                 >
                                     <MarkdownTOC
-                                        markdown={blog.content}
+                                        markdown={blogId}
                                         maxDepth={3}
                                     />
                                 </motion.div>

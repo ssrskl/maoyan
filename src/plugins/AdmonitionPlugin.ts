@@ -2,7 +2,7 @@ import type { BytemdPlugin } from "bytemd";
 import remarkDirective from "remark-directive";
 import { visit } from 'unist-util-visit';
 
-function remarkDirectiveCustom() {
+export function remarkDirectiveCustom() {
     return (tree: any) => {
         visit(tree, (node) => {
             if (node.type === 'containerDirective') {

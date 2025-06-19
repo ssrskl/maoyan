@@ -19,6 +19,7 @@ import { CommentSection } from '@/components/CommentSection';
 import { MDXProvider } from '@mdx-js/react';
 import Class_Loader_Of_JVM from '@/blogs/java/Class-Loader-Of-JVM.mdx';
 import type { JSX } from 'react/jsx-runtime';
+import MDXProviderPlus from '@/components/MDXProviderPlus';
 
 export const Route = createFileRoute('/markdown-demo')({
   component: MarkdownDemo
@@ -133,7 +134,13 @@ function MarkdownDemo() {
   const components = {
     em(properties: JSX.IntrinsicAttributes & ClassAttributes<HTMLElement> & HTMLAttributes<HTMLElement>){
       return <i {...properties} className='text-red-500' />
-    }
+    },
+    h1: (props: any) => <h1 className="text-3xl font-bold mb-4 text-blue-600" {...props} />,
+    h2: (props: any) => <h2 className="text-2xl font-bold mb-3 text-green-600" {...props} />,
+    h3: (props: any) => <h3 className="text-xl font-bold mb-2 text-purple-600" {...props} />,
+    h4: (props: any) => <h4 className="text-lg font-bold mb-2 text-orange-600" {...props} />,
+    h5: (props: any) => <h5 className="text-base font-bold mb-1 text-pink-600" {...props} />,
+    h6: (props: any) => <h6 className="text-sm font-bold mb-1 text-indigo-600" {...props} />,
   }
   return (
     <div className="container mx-auto py-8 px-4">
@@ -294,10 +301,12 @@ function MarkdownDemo() {
         </TabsContent>
         <TabsContent value='tag' className='p-4 border rounded-lg'>
           <div className="container mx-auto p-4 markdown-body">
-            <h2 className="text-2xl font-bold">MDX测试</h2>
-            <MDXProvider components={components}>
-              <Class_Loader_Of_JVM />
+            {/* <MDXProviderPlus> */}
+            <MDXProvider components={{h2: (props: any) => <h2 className="text-2xl font-bold mb-3 text-green-600" {...props} />}}>
+              
             </MDXProvider>
+              
+            {/* </MDXProviderPlus> */}
           </div>
         </TabsContent>
       </Tabs>

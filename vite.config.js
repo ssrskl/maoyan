@@ -9,6 +9,7 @@ import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import rehypePrettyCode from "rehype-pretty-code";
 import remarkDirective from "remark-directive";
+import { remarkDirectiveCustom } from "./src/plugins/AdmonitionPlugin";
 
 const rehypePrettyCodeOptions = {
 
@@ -22,7 +23,7 @@ export default defineConfig({
     viteReact(), 
     tailwindcss(), 
     mdx({
-      remarkPlugins: [remarkFrontmatter,remarkGfm,remarkDirective],
+      remarkPlugins: [remarkFrontmatter,remarkGfm,remarkDirective,remarkDirectiveCustom],
       rehypePlugins: [rehypeSlug,[rehypePrettyCode,rehypePrettyCodeOptions]],
     })
   ],

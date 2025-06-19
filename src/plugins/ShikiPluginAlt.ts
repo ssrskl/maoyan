@@ -1,6 +1,5 @@
 import type { BytemdPlugin } from "bytemd"
 import { codeToHtml } from 'shiki'
-import { transformerNotationDiff, transformerNotationFocus, transformerNotationHighlight } from '@shikijs/transformers'
 
 
 export function ShikiPluginAlt(): BytemdPlugin {
@@ -20,18 +19,6 @@ export function ShikiPluginAlt(): BytemdPlugin {
           const html = await codeToHtml(codeContent, {
             lang: lang || 'text',
             theme: 'one-light',
-            transformers:[
-              transformerNotationDiff(
-                {matchAlgorithm: "v3"}
-              ),
-              transformerNotationFocus(
-                {
-                  matchAlgorithm: "v3",
-                }
-              ),
-              transformerNotationHighlight(),
-
-            ]
           }
         )
           

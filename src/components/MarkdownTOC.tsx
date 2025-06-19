@@ -10,41 +10,12 @@ export interface TOCItem {
 }
 
 export interface MarkdownTOCProps {
-  markdown: string;
+  blogId?: string;
+  markdown?: string;
   className?: string;
   maxDepth?: number;
   onItemClick?: (id: string) => void;
 }
-
-/**
- * 解析 Markdown 内容并提取标题
- */
-// const parseMarkdownHeadings = (markdown: string, maxDepth: number = 3): TOCItem[] => {
-//   // 匹配 Markdown 标题: # 标题, ## 标题, 等
-//   const headingRegex = /^(#{1,6})\s+(.+)$/gm;
-//   const headings: TOCItem[] = [];
-//   let match;
-
-//   while ((match = headingRegex.exec(markdown)) !== null) {
-//     const level = match[1].length;
-//     // 只包含指定深度的标题
-//     if (level <= maxDepth) {
-//       const text = match[2].trim();
-//       // 创建一个 ID（基于文本的 slug）
-//       const id = text
-//         .toLowerCase()
-//         .replace(/\s+/g, '-')
-//         .replace(/[^\w\-]+/g, '')
-//         .replace(/\-\-+/g, '-')
-//         .replace(/^-+/, '')
-//         .replace(/-+$/, '');
-
-//       headings.push({ id, level, text });
-//     }
-//   }
-
-//   return headings;
-// };
 const parseHeadingsFromDOM = (maxDepth: number = 3): TOCItem[] => {
   const container = document.querySelector('.markdown-body');
   if (!container) {
