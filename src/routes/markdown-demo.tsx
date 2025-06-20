@@ -19,7 +19,6 @@ import { CommentSection } from '@/components/CommentSection';
 import { MDXProvider } from '@mdx-js/react';
 import Class_Loader_Of_JVM from '@/blogs/java/Class-Loader-Of-JVM.mdx';
 import type { JSX } from 'react/jsx-runtime';
-import MDXProviderPlus from '@/components/MDXProviderPlus';
 
 export const Route = createFileRoute('/markdown-demo')({
   component: MarkdownDemo
@@ -142,6 +141,7 @@ function MarkdownDemo() {
     h5: (props: any) => <h5 className="text-base font-bold mb-1 text-pink-600" {...props} />,
     h6: (props: any) => <h6 className="text-sm font-bold mb-1 text-indigo-600" {...props} />,
   }
+
   return (
     <div className="container mx-auto py-8 px-4">
       <h1 className="text-3xl font-bold mb-8">测试</h1>

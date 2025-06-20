@@ -1,0 +1,301 @@
+# 运行项目
+
+```java
+nohup java -jar QuickDevelop-0.0.1-SNAPSHOT.jar --server.port=8080 >/dev/null 2>&1 & 
+```
+
+**关于**`/dev/null 2>&1`的解释：[https://stackoverflow.nilmap.com/question?dest_url=https://stackoverflow.com/questions/10508843/what-is-dev-null-21](https://stackoverflow.nilmap.com/question?dest_url=https://stackoverflow.com/questions/10508843/what-is-dev-null-21)
+
+* `/dev/null` 将标准输出 (stdout) 重定向到 /dev/null，后者将其丢弃。（>> 似乎有点多余，因为 >> 表示追加，而 > 表示截断和写入，并且追加到 /dev/null 或写入 /dev/null 具有相同的净效果。出于这个原因，我通常只使用 >。）
+* `2>&1` 将标准错误 (2) 重定向到标准输出 (1)，然后将其丢弃，因为标准输出已经被重定向
+* `&`代表在后台运行，使用ctrl+c不会中断程序的运行，但是关闭窗口会中断程序的运行。
+* `nohup`使用这种方式运行的程序日志会输出到当前目录下的nohup.out文件，使用ctrl+c中断或者关闭窗口都不会中断程序的执行。
+
+# 查看当前进程
+
+```bash
+ps -ef | grep java
+```
+
+# 停止项目运行
+
+```bash
+#  ‘xxx’为进程 id
+kill -9 xxx
+```
+
+# 快速部署脚本
+
+```bash
+#!/bin/sh
+echo '服务器开始部署'
+# 项目的路径
+jarpath="/www/wwwroot/test"
+# 切换到项目的路径
+cd ${jarpath}
+echo '当前路径:'+$(pwd)
+
+newJar="QuickDevelop-0.0.1-SNAPSHOT-new.jar"
+echo '新的jar包的名称为: '$newJar
+# 字符串为空
+if [ -z $newJar ]; then
+     echo "新的jar包不能为空"
+     exit 0
+fi
+
+oldJar="QuickDevelop-0.0.1-SNAPSHOT.jar"
+echo '正在备份原来的jar包......'
+# 获取当前的时间
+suffix=".bak-"`date '+%Y%m%d'`
+echo ${suffix}
+# 备份原来的jar包
+mv ${oldJar} ${oldJar}${suffix}
+echo '备份完成!' 
+
+echo '正在重命名新的jar包'
+mv ${newJar} ${oldJar}
+
+# 获取旧的Jar包的名称
+oldJarPid=`ps -ef | grep QuickDevelop-0.0.1-SNAPSHOT | grep -v grep | awk '{print $2}'`
+echo "当前运行的jar包的pid为:"${oldJarPid}
+echo '正在杀死当前运行的程序.......'
+
+kill -9 ${oldJarPid}
+echo '已经将运行的jar包杀死'
+
+echo '开始运行新的jar包'
+# java -jar QuickDevelop-0.0.1-SNAPSHOT.jar
+nohup java -jar QuickDevelop-0.0.1-SNAPSHOT.jar --server.port=8080 >/dev/null 2>&1 & 
+nowPid=`ps -ef | grep QuickDevelop-0.0.1-SNAPSHOT | grep -v grep | awk '{print $2}'`
+echo '当前服务的进程PID:'${nowPid}
+exit 0
+```
+
+**局限性比较高,还需要优化**
+
+# 优化的运行脚本
+
+```bash
+#!/bin/sh
+# ./start.sh start 启动
+# ./start.sh stop 停止
+# ./start.sh restart 重启
+# ./start.sh status 状态
+AppName=QuickDevelop-0.0.1-SNAPSHOT.jar
+
+# JVM参数
+JVM_OPTS="-Dname=$AppName  -Duser.timezone=Asia/Shanghai -Xms512M -Xmx512M -XX:PermSize=256M -XX:MaxPermSize=512M -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDateStamps  -XX:+PrintGCDetails -XX:NewRatio=1 -XX:SurvivorRatio=30 -XX:+UseParallelGC -XX:+UseParallelOldGC"
+APP_HOME=`pwd`
+LOG_PATH=$APP_HOME/logs/$AppName.log
+
+if [ "$1" = "" ];
+then
+    echo -e "\033[0;31m 未输入操作名 \033[0m  \033[0;34m {start|stop|restart|status} \033[0m"
+    exit 1
+fi
+
+if [ "$AppName" = "" ];
+then
+    echo -e "\033[0;31m 未输入应用名 \033[0m"
+    exit 1
+fi
+
+function start()
+{
+    PID=`ps -ef |grep java|grep $AppName|grep -v grep|awk '{print $2}'`
+
+	if [ x"$PID" != x"" ]; then
+	    echo "$AppName 已经启动，无需再启动"
+	else
+# 		nohup java -jar  $JVM_OPTS target/$AppName > /dev/null 2>&1 &
+		nohup java -jar $AppName --server.port=8080 >/dev/null 2>&1 & 
+		echo "$AppName 运行成功"
+	fi
+}
+
+function stop()
+{
+    echo "Stop $AppName"
+
+	PID=""
+	query(){
+		PID=`ps -ef |grep java|grep $AppName|grep -v grep|awk '{print $2}'`
+	}
+
+	query
+	if [ x"$PID" != x"" ]; then
+		kill -TERM $PID
+		echo "$AppName (pid:$PID) exiting..."
+		while [ x"$PID" != x"" ]
+		do
+			sleep 1
+			query
+		done
+		echo "$AppName 还未启动"
+	else
+		echo "$AppName 已经停止"
+	fi
+}
+
+function restart()
+{
+    stop
+    sleep 2
+    start
+}
+
+function status()
+{
+    PID=`ps -ef |grep java|grep $AppName|grep -v grep|wc -l`
+    if [ $PID != 0 ];then
+        echo "$AppName 正在运行中"
+    else
+        echo "$AppName 还没有运行"
+    fi
+}
+
+case $1 in
+    start)
+    start;;
+    stop)
+    stop;;
+    restart)
+    restart;;
+    status)
+    status;;
+    *)
+
+esac
+```
+
+## 启动脚本
+
+```bash
+#!/bin/sh
+# ./start.sh start 启动
+AppName=QuickDevelop-0.0.1-SNAPSHOT.jar
+APP_HOME=`pwd`
+echo "开始启动项目-------------"
+function start()
+{
+    PID=`ps -ef |grep java|grep $AppName|grep -v grep|awk '{print $2}'`
+
+	if [ x"$PID" != x"" ]; then
+	    echo "$AppName 已经启动，无需再启动"
+	else
+		java -jar $AppName --server.port=8080 2>&1 & 
+		echo "$AppName 运行成功"
+	fi
+}
+start
+```
+
+## 停止脚本
+
+```bash
+AppName=QuickDevelop-0.0.1-SNAPSHOT.jar
+echo "正在停止项目----------------"
+function stop()
+{
+    echo "Stop $AppName"
+
+	PID=""
+	query(){
+		PID=`ps -ef |grep java|grep $AppName|grep -v grep|awk '{print $2}'`
+	}
+
+	query
+	if [ x"$PID" != x"" ]; then
+		kill -TERM $PID
+		echo "$AppName (pid:$PID) exiting..."
+		while [ x"$PID" != x"" ]
+		do
+			sleep 1
+			query
+		done
+		echo "$AppName 还未启动"
+	else
+		echo "$AppName 已经停止"
+	fi
+}
+stop
+```
+
+## 状态脚本
+
+```bash
+AppName=QuickDevelop-0.0.1-SNAPSHOT.jar
+echo "查询项目状态-----------"
+function status()
+{
+    PID=`ps -ef |grep java|grep $AppName|grep -v grep|wc -l`
+    if [ $PID != 0 ];then
+        echo "$AppName 正在运行中"
+    else
+        echo "$AppName 还没有运行"
+    fi
+}
+status
+```
+
+## Docker 部署脚本
+
+```bash
+# 配置镜像名称s
+img=oimaoyanio/quickdevelop
+# 配置镜像标签(版本)
+tag=v1.0
+# 配置容器名称
+container=quickdevelop
+
+
+# 判断容器是否存在，存在则删除。
+if sudo docker ps -a --filter name=^/$container$ | grep -i "$container"; then
+  echo "容器: $container 存在，删除容器."
+  sudo docker stop "$container"
+  sudo docker rm -f "$container"
+else
+  echo "容器: $container 不存在" 
+fi
+
+
+# 判断镜像是否存在，如存在则删除
+if sudo docker images --filter=reference="$img:$tag" | grep -i "$img"; then
+  echo "镜像: $img:$tag 镜像存在, 删除镜像重新构建."
+  sudo docker rmi $img:$tag
+fi
+
+# 拉取新镜像
+echo "拉取"$img:$tag"新镜像."
+sudo docker pull $img:$tag
+sudo docker build -t $img:$tag .
+
+
+# 启动服务，挂载外部数据信息
+echo "启动"$container"容器服务!"
+sudo docker run -d -p 8080:8080 \
+-e SERVER_PORT=8080 \
+-e MYSQL_USERNAME=root \
+-e MYSQL_PASSWORD=ar352878987 \
+-e MYSQL_ADDRESS=172.17.0.1 \
+-e MYSQL_PORT=3306 \
+-e REDIS_ADDRESS=172.17.0.1 \
+-e REDIS_PORT=6379 \
+-e REDIS_PASSWORD=ar352878987 \
+-e MAIL_USERNAME=1071352028@qq.com \
+-e MAIL_PASSWORD=wxmvjoivirfebfcc \
+-e RABBITMQ_ADDRESS=172.17.0.1 \
+-e RABBITMQ_PORT=5672 \
+-e RABBITMQ_USERNAME=guest \
+-e RABBITMQ_PASSWORD=guest \
+--restart=always --name $container $img:$tag
+
+
+# 检测服务是否启动成功
+if sudo docker ps --filter name=^/$container$ | grep -i "up"; then
+    echo $container"服务启动成功Pass"
+else
+    echo $container"服务启动失败Fail"
+fi
+
+```

@@ -16,15 +16,8 @@ import { FaLink } from "react-icons/fa";
 import { Skeleton } from '@/components/ui/skeleton'
 import { MdOutlineDateRange } from 'react-icons/md'
 import { TimeFormatter, toFromNow } from '@/lib/time'
-import { Viewer } from '@bytemd/react'
-import gfm from '@bytemd/plugin-gfm'
-// import highlight from '@bytemd/plugin-highlight'
-import AdmonitionPlugin from '@/plugins/AdmonitionPlugin'
-import { RenderPlugin } from '@/plugins/RenderPlugin'
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
 import MarkdownTOC from '@/components/MarkdownTOC'
-import CommonPlugin from '@/plugins/CommonPlugin'
-import BlockQuotePlugin from '@/plugins/BlockQuotePlugin'
 import { getTagIcon } from '@/components/TagIcons'
 import { motion } from 'framer-motion'
 import Like from '@/components/Like'
@@ -59,14 +52,6 @@ const staggerContainer = {
 }
 function BlogDetail() {
     const { blogId } = useParams({ from: '/_layout/blog/$blogId' });
-    const plugins = [
-        gfm(),
-        AdmonitionPlugin(),
-        BlockQuotePlugin(),
-        CommonPlugin(),
-        // ShikiPluginAlt(),
-        RenderPlugin(),
-    ]
     const { data: blog, isLoading } = useQuery({
         queryKey: ['blog', blogId],
         queryFn: async () => {
@@ -80,11 +65,10 @@ function BlogDetail() {
         },
         enabled: !!blogId
     })
-    const { data: comments} = useQuery({
+    const { data: comments, isLoading: isCommentsLoading } = useQuery({
         queryKey: ['comments', blogId],
         queryFn: async () => {
             const response = await databases.listDocuments('blog', 't_comment', [Query.equal('blog_id', blogId)])
-            console.log(response.documents)
             const responseComments:ResponseComment[] =[]
             response.documents?.forEach(responseComment=>{
                 responseComments.push({
@@ -209,11 +193,13 @@ function BlogDetail() {
                                 <motion.div
                                     className='mt-10'
                                 >
+                                    {isCommentsLoading ? <div>加载中...</div> : 
                                     <CommentSection 
-                                        comments={comments}
+                                        comments={comments || []}
                                         onCommentSubmit={() => {}}
                                         onReplySubmit={() => {}}
                                     />
+                                    }
                                 </motion.div>
                             </motion.div>
                             {/* 侧边栏 */}

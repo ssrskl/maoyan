@@ -1,6 +1,8 @@
 import { MDXProvider } from "@mdx-js/react";
 import Admonition from "./Admonition";
-import Class_Loader_Of_JVM from "@/blogs/java/Class-Loader-Of-JVM.mdx";
+import ClassLoaderOfJVM from "@/blogs/java/Class-Loader-Of-JVM.mdx";
+import mdxfile from "@/lib/mdx";
+
 
 const components = {
     h1: (props: any) => <h1 className="text-3xl font-bold mb-4 text-blue-600" {...props} />,
@@ -34,10 +36,12 @@ interface MDXProviderPlusProps {
     blogId: string;
 }
 export default function MDXProviderPlus({blogId}: MDXProviderPlusProps) {
+    const mdx = mdxfile.find(item => item.title === blogId)
+    console.log(ClassLoaderOfJVM)
     return (
         <MDXProvider>
             <div className="markdown-body">
-                <Class_Loader_Of_JVM components={components}/>
+                {mdx && <mdx.component components={components}/>}
             </div>
         </MDXProvider>
     )
